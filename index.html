@@ -57,16 +57,36 @@
             margin-bottom: 30px;
         }
 
+        /* --- СТИЛИ ДЛЯ QR (ПЕРЕНЕСЕНЫ И ОБНОВЛЕНЫ) --- */
+        .qr-wrapper {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .qr-title {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
         .qr-code {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 20px;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto;
             background: #f0f0f0;
             border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            border: 5px solid #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .qr-code img {
@@ -78,9 +98,10 @@
         .qr-placeholder {
             color: #999;
             text-align: center;
-            padding: 20px;
+            padding: 15px;
             font-size: 14px;
         }
+        /* -------------------- */
 
         h1 {
             color: #333;
@@ -461,15 +482,8 @@
 </head>
 <body>
     <div class="main-container">
-        <!-- Registration Form -->
         <div class="container" id="registrationForm">
             <div class="header">
-                <div class="qr-code" id="qrCode">
-                    <div class="qr-placeholder">
-                        📱 Место для QR-кода<br>
-                        <small>Загрузите изображение в код</small>
-                    </div>
-                </div>
                 <h1>Регистрация</h1>
                 <p class="subtitle">Заполните форму для участия</p>
             </div>
@@ -514,8 +528,17 @@
             </div>
         </div>
 
-        <!-- Live Participants List -->
         <div class="participants-container">
+            
+            <div class="qr-wrapper">
+                <div class="qr-title">РЕГИСТРАЦИЯ ЧЕРЕЗ QR</div>
+                <div class="qr-code" id="qrCode">
+                    <div class="qr-placeholder">
+                        📱 Место для QR-кода<br>
+                        <small>Загрузите изображение в код</small>
+                    </div>
+                </div>
+            </div>
             <div class="stats-header">
                 <h2>Зарегистрированные участники</h2>
                 <div class="stats-grid">
@@ -549,7 +572,6 @@
         </div>
     </div>
 
-    <!-- Admin Panel (hidden by default) -->
     <div class="container admin-panel" id="adminPanel" style="max-width: 600px; margin: 0 auto;">
         <div class="header">
             <h1>Админ-панель</h1>
@@ -570,8 +592,8 @@
         // ========================================
         
         const CONFIG = {
-            // QR-код (необязательно)
-            qrCodeUrl: 'YOUR_QR_CODE_URL_HERE',
+            // Имя файла изображения QR-кода в той же папке
+            qrCodeUrl: 'qr_20260207_004128.png',
             
             // ID вашей Google таблицы
             spreadsheetId: '1kwdeLj2QTAjjpUMUcCxzN--f2Le02s3P2wipIZ6D7lY',
