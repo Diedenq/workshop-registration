@@ -16,7 +16,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
-            overflow: hidden; /* Блокируем прокрутку пока не выбран язык */
+            overflow: hidden;
         }
 
         /* --- ПРИВЕТСТВЕННЫЙ ЭКРАН (Оверлей) --- */
@@ -93,8 +93,6 @@
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
         }
 
-        /* ------------------------------------- */
-
         /* Языковой переключатель */
         .lang-switcher {
             position: absolute;
@@ -149,12 +147,10 @@
             grid-template-columns: 1fr 1fr;
             gap: 30px;
             align-items: start;
-            /* Эффект размытия пока не выбран язык */
             filter: blur(5px); 
             transition: filter 0.5s ease;
         }
         
-        /* Когда оверлей скрыт, убираем размытие */
         body.lang-selected .main-container {
             filter: blur(0);
         }
@@ -264,6 +260,108 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
+        /* --- СТИЛИ ДЛЯ ВЫПАДАЮЩЕГО СПИСКА С ПОИСКОМ (ШКОЛА) --- */
+        .custom-select-wrapper {
+            position: relative;
+            user-select: none;
+            width: 100%;
+        }
+        .custom-select {
+            position: relative;
+            width: 100%;
+        }
+        .custom-select-trigger {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+            color: #666;
+        }
+        .custom-select-trigger.selected { color: #333; }
+        .custom-select.open .custom-select-trigger {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .select-arrow {
+            width: 12px; height: 12px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667eea' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            transition: transform 0.3s;
+        }
+        .custom-select.open .select-arrow { transform: rotate(180deg); }
+        .custom-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-top: 5px;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: all 0.3s;
+            z-index: 999;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e0e0e0;
+        }
+        .custom-select.open .custom-options {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
+        }
+        .custom-select-search {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            background: #f8f9ff;
+        }
+        .custom-select-search input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+        .custom-select-search input:focus { border-color: #667eea; }
+        .options-container {
+            max-height: 220px;
+            overflow-y: auto;
+        }
+        .custom-option {
+            padding: 12px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+            color: #333;
+            border-bottom: 1px solid #f9f9f9;
+        }
+        .custom-option:hover {
+            background: #f0f4ff;
+            color: #667eea;
+            font-weight: 600;
+        }
+        .custom-option.hidden { display: none; }
+        .no-results {
+            padding: 15px;
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            display: none;
+        }
+
+        /* ----------------------------------------------------- */
+
         .submit-btn {
             width: 100%;
             padding: 18px;
@@ -371,14 +469,12 @@
 
         .participant-item:hover { background: #f8f9ff; }
         
-        /* ПЛАВНАЯ АНИМАЦИЯ НОВЫХ ГОСТЕЙ */
         .participant-item.new { 
             position: relative;
             overflow: hidden;
             animation: smoothAppear 3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
-        /* Үстінен жүгіріп өтетін ақ жарқыл (блик) эффектісі */
         .participant-item.new::after {
             content: '';
             position: absolute;
@@ -391,25 +487,24 @@
             animation: shimmer 1.5s ease-in-out forwards;
         }
 
-        /* Жұмсақ пайда болу және түстің тегіс жоғалуы */
         @keyframes smoothAppear { 
             0% { 
                 opacity: 0; 
-                transform: translateX(-30px); /* Сәл сол жақтан сырғып келеді */
-                background-color: rgba(76, 175, 80, 0.2); /* Жұмсақ жасыл фон */
-                box-shadow: inset 4px 0 0 #4caf50; /* Сол жағындағы жасыл сызық */
+                transform: translateX(-30px);
+                background-color: rgba(76, 175, 80, 0.2);
+                box-shadow: inset 4px 0 0 #4caf50;
             }
             15% { 
                 opacity: 1; 
-                transform: translateX(0); /* Өз орнына келеді */
+                transform: translateX(0);
                 background-color: rgba(76, 175, 80, 0.15);
                 box-shadow: inset 4px 0 0 #4caf50;
             }
             100% { 
                 opacity: 1;
                 transform: translateX(0);
-                background-color: transparent; /* Түс біртіндеп мөлдірге айналады */
-                box-shadow: inset 0 0 0 transparent; /* Сызық та жоғалады */
+                background-color: transparent;
+                box-shadow: inset 0 0 0 transparent;
             } 
         }
 
@@ -432,8 +527,9 @@
 
         .participant-info { flex: 1; }
         .participant-name { font-weight: 600; color: #333; font-size: 16px; margin-bottom: 3px; }
+        .participant-school { font-size: 13px; color: #667eea; font-weight: 600; margin-bottom: 2px; }
         .participant-role { font-size: 14px; color: #666; }
-        .participant-time { font-size: 12px; color: #999; }
+        .participant-time { font-size: 12px; color: #999; margin-top: 2px;}
 
         .loading, .empty-state { text-align: center; padding: 40px; color: #999; }
         .empty-state-icon { font-size: 64px; margin-bottom: 20px; opacity: 0.5; }
@@ -529,6 +625,28 @@
                     <input type="text" id="customRole" data-i18n-placeholder="customRolePlaceholder" placeholder="Мысалы: Психолог, Тәрбиеші...">
                 </div>
 
+                <!-- КАСТОМНЫЙ ПОИСКОВЫЙ СПИСОК ШКОЛ -->
+                <div class="form-group custom-select-wrapper">
+                    <label data-i18n="schoolLabel">Мектебіңіз:</label>
+                    <div class="custom-select" id="schoolSelect">
+                        <div class="custom-select-trigger" id="schoolTrigger">
+                            <span id="schoolSelectedText" data-i18n="schoolPlaceholder">Тізімнен мектепті таңдаңыз...</span>
+                            <div class="select-arrow"></div>
+                        </div>
+                        <div class="custom-options">
+                            <div class="custom-select-search">
+                                <input type="text" id="schoolSearchInput" placeholder="Іздеу..." autocomplete="off">
+                            </div>
+                            <div class="options-container" id="schoolsOptionsContainer">
+                                <!-- Опции будут добавлены через JS -->
+                            </div>
+                            <div class="no-results" id="noSchoolResults" data-i18n="noResults">Мектеп табылмады</div>
+                        </div>
+                    </div>
+                    <!-- Скрытое поле для отправки значения -->
+                    <input type="hidden" id="school">
+                </div>
+
                 <button type="submit" class="submit-btn" id="submitBtn" data-i18n="submitBtn">Тіркелу</button>
             </form>
 
@@ -619,6 +737,110 @@
             refreshInterval: 5000
         };
 
+        // ДАННЫЕ ДЛЯ ШКОЛ (На двух языках)
+        const schoolsData = {
+            kk:[
+                "«Абылай хан атындағы орта мектеп» КММ",
+                "«Абай атындағы орта мектеп» КММ /Есік/",
+                "«Х.Абдуллин атындағы орта мектеп» КММ",
+                "«Ы.Алтынсарин орта мектебі» КММ",
+                "«Алға орта мектебі - МДШО» КММ",
+                "«Т.Аубакиров атындағы орта мектеп» КММ",
+                "«Азат негізгі орта мектеп» КММ",
+                "«№1 Азат орта мектебі» КММ",
+                "«Ақбастау орта мектебі» КММ",
+                "«Әл-Фараби атындағы орта мектеп» КММ",
+                "«Әймен орта мектебі» КММ",
+                "«Балтабай орта мектебі» КММ",
+                "«Баяндай негізгі орта мектебі» КММ",
+                "«Байтұрсынов орта мектебі» КММ",
+                "«Бәйтерек орта мектебі» КММ",
+                "«Бөлек батыр орта мектебі» КММ",
+                "«Ә. Бөкейхан орта мектебі» КММ",
+                "«М.Горький атындағы орта мектеп» КММ",
+                "«Еңбек орта мектебі» КММ",
+                "«Екпінді орта мектебі» КММ",
+                "«О. Жандосов атындағы орта мектеп» КММ",
+                "«І.Жансүгіров атындағы орта мектеп МДШО» КММ",
+                "«Жексембеков атындағы орта мектеп» КММ",
+                "«Көктөбе орта мектебі» КММ",
+                "«Қайрат НОМ» КММ",
+                "«№6 қазақ орта мектеп-лицей» КММ",
+                "«Казатком негізгі орта мектеп» КММ",
+                "«Құрөзек негізгі орта мектебі» КММ",
+                "«Қойшыбек орта мектебі» КММ",
+                "«Д.Қонаев атындағы орта мектеп» КММ",
+                "«М.Ломоносов атындағы орта мектеп» КММ",
+                "«Б.Майлин атындағы орта мектеп» КММ",
+                "«Омар Мухаммадий атындағы орта мектеп» КММ",
+                "«Орынбетов орта мектебі» КММ",
+                "«Н.Островский атындағы орта мектеп» КММ",
+                "«Рахат орта мектебі» КММ",
+                "«Рахат ауылдық округі №1 орта мектебі» КММ",
+                "«Райымбек батыр атындағы орта мектеп» КММ",
+                "«Т.Рысқұлов атындағы орта мектеп» КММ",
+                "«Садыр атындағы орта мектеп» КММ",
+                "«Қ. Сәтпаев атындағы орта мектеп» КММ",
+                "«Таутүрген НОМ» КММ",
+                "«Талдыбұлақ орта мектебі» КММ",
+                "«В.Терешкова атындағы орта мектеп» КММ",
+                "«Р.Тоқатаев атындағы орта мектеп» КММ",
+                "«Төле би орта мектебі» КММ",
+                "«И.Шорманов орта мектебі» КММ",
+                "«Ш.Уәлиханов атындағы орта мектеп» КММ"
+            ],
+            ru:[
+                "КГУ «Средняя школа имени Абылай хана»",
+                "КГУ «Средняя школа имени Абая» /Есик/",
+                "КГУ «Средняя школа имени Х. Абдуллина»",
+                "КГУ «Средняя школа им. Ы. Алтынсарина»",
+                "КГУ «Средняя школа Алга - ДМЦ»",
+                "КГУ «Средняя школа имени Т. Аубакирова»",
+                "КГУ «Основная средняя школа Азат»",
+                "КГУ «Средняя школа №1 Азат»",
+                "КГУ «Средняя школа Акбастау»",
+                "КГУ «Средняя школа имени Аль-Фараби»",
+                "КГУ «Средняя школа Аймен»",
+                "КГУ «Средняя школа Балтабай»",
+                "КГУ «Основная средняя школа Баяндай»",
+                "КГУ «Средняя школа им. Байтурсынова»",
+                "КГУ «Средняя школа Байтерек»",
+                "КГУ «Средняя школа Болек батыр»",
+                "КГУ «Средняя школа им. А. Бокейхана»",
+                "КГУ «Средняя школа имени М. Горького»",
+                "КГУ «Средняя школа Енбек»",
+                "КГУ «Средняя школа Екпинди»",
+                "КГУ «Средняя школа имени О. Жандосова»",
+                "КГУ «Средняя школа имени И. Жансугурова - ДМЦ»",
+                "КГУ «Средняя школа имени Жексембекова»",
+                "КГУ «Средняя школа Коктобе»",
+                "КГУ «Основная средняя школа Кайрат»",
+                "КГУ «Казахская средняя школа-лицей №6»",
+                "КГУ «Основная средняя школа Казатком»",
+                "КГУ «Основная средняя школа Курозек»",
+                "КГУ «Средняя школа Койшыбек»",
+                "КГУ «Средняя школа имени Д. Конаева»",
+                "КГУ «Средняя школа имени М. Ломоносова»",
+                "КГУ «Средняя школа имени Б. Майлина»",
+                "КГУ «Средняя школа имени Омара Мухаммади»",
+                "КГУ «Средняя школа Орынбетова»",
+                "КГУ «Средняя школа имени Н. Островского»",
+                "КГУ «Средняя школа Рахат»",
+                "КГУ «Средняя школа №1 Рахатского сельского округа»",
+                "КГУ «Средняя школа имени Райымбек батыра»",
+                "КГУ «Средняя школа имени Т. Рыскулова»",
+                "КГУ «Средняя школа имени Садыра»",
+                "КГУ «Средняя школа имени К. Сатпаева»",
+                "КГУ «Основная средняя школа Таутурген»",
+                "КГУ «Средняя школа Талдыбулак»",
+                "КГУ «Средняя школа имени В. Терешковой»",
+                "КГУ «Средняя школа имени Р. Токатаева»",
+                "КГУ «Средняя школа Толе би»",
+                "КГУ «Средняя школа И. Шорманова»",
+                "КГУ «Средняя школа имени Ш. Уалиханова»"
+            ]
+        };
+
         const translations = {
             kk: {
                 regTitle: "Тіркелу",
@@ -637,6 +859,10 @@
                 roleCustom: "✏️ Басқа (өзін жазу)",
                 labelCustomRole: "Өз рөліңізді жазыңыз:",
                 customRolePlaceholder: "Мысалы: Психолог, Тәрбиеші...",
+                schoolLabel: "Мектебіңіз:",
+                schoolPlaceholder: "Тізімнен мектепті таңдаңыз...",
+                searchPlaceholder: "Мектепті іздеу...",
+                noResults: "Мектеп табылмады",
                 submitBtn: "Тіркелу",
                 submitting: "Тіркелу...",
                 successMsg: "✅ Сіз сәтті тіркелдіңіз!",
@@ -666,7 +892,8 @@
                 backBtn: "← Артқа",
                 newParticipant: "✨ Жаңа қатысушы!",
                 alertName: "Өтінеміз, атыңызды енгізіңіз",
-                alertRole: "Өтінеміз, рөліңізді таңдаңыз"
+                alertRole: "Өтінеміз, рөліңізді таңдаңыз",
+                alertSchool: "Өтінеміз, мектебіңізді таңдаңыз"
             },
             ru: {
                 regTitle: "Регистрация",
@@ -685,6 +912,10 @@
                 roleCustom: "✏️ Другое (написать свою)",
                 labelCustomRole: "Напишите свою роль:",
                 customRolePlaceholder: "Например: Психолог, Воспитатель...",
+                schoolLabel: "Ваша школа:",
+                schoolPlaceholder: "Выберите школу из списка...",
+                searchPlaceholder: "Поиск школы...",
+                noResults: "Школа не найдена",
                 submitBtn: "Зарегистрироваться",
                 submitting: "Регистрация...",
                 successMsg: "✅ Вы успешно зарегистрированы!",
@@ -714,19 +945,17 @@
                 backBtn: "← Назад",
                 newParticipant: "✨ Новый участник!",
                 alertName: "Пожалуйста, введите ваше имя",
-                alertRole: "Пожалуйста, выберите вашу роль"
+                alertRole: "Пожалуйста, выберите вашу роль",
+                alertSchool: "Пожалуйста, выберите вашу школу"
             }
         };
 
         let currentLang = 'kk'; 
 
-        // Функция вызывается при нажатии больших кнопок на старте
         function confirmLanguage(lang) {
             setLanguage(lang);
-            // Скрываем оверлей
             const overlay = document.getElementById('langOverlay');
             overlay.classList.add('hidden');
-            // Убираем блюр и разрешаем скролл
             document.body.classList.add('lang-selected');
             document.body.style.overflow = 'auto';
         }
@@ -734,19 +963,16 @@
         function setLanguage(lang) {
             currentLang = lang;
             
-            // Обновляем маленькие кнопки в углу
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(`lang-${lang}`).classList.add('active');
 
-            // Обновляем тексты
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[lang][key]) {
-                    el.innerHTML = translations[lang][key]; // innerHTML чтобы теги типа <br> работали
+                    el.innerHTML = translations[lang][key]; 
                 }
             });
 
-            // Обновляем плейсхолдеры
             document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
                 const key = el.getAttribute('data-i18n-placeholder');
                 if (translations[lang][key]) {
@@ -754,14 +980,13 @@
                 }
             });
 
+            // Обновляем список школ при смене языка
+            renderSchoolDropdown();
+
             if (participantsData.length > 0) {
                 renderParticipants();
             }
         }
-
-        // ========================================
-        // LOGIC
-        // ========================================
 
         if (CONFIG.qrCodeUrl !== 'YOUR_QR_CODE_URL_HERE') {
             document.getElementById('qrCode').innerHTML = `<img src="${CONFIG.qrCodeUrl}" alt="QR Code">`;
@@ -771,9 +996,8 @@
         let currentFilter = 'all';
         let lastParticipantsCount = 0;
         let participantsData =[];
-        let shownParticipants = new Set(); // Отслеживание уже показанных участников
+        let shownParticipants = new Set(); 
 
-        // Обработчик выбора роли
         const roleSelect = document.getElementById('roleSelect');
         const customRoleGroup = document.getElementById('customRoleGroup');
         const customRoleInput = document.getElementById('customRole');
@@ -790,6 +1014,84 @@
             }
         });
 
+        // ========================================
+        // ЛОГИКА КАСТОМНОГО ВЫПАДАЮЩЕГО СПИСКА ШКОЛ
+        // ========================================
+        const schoolSelect = document.getElementById('schoolSelect');
+        const schoolTrigger = document.getElementById('schoolTrigger');
+        const schoolSelectedText = document.getElementById('schoolSelectedText');
+        const schoolSearchInput = document.getElementById('schoolSearchInput');
+        const schoolsOptionsContainer = document.getElementById('schoolsOptionsContainer');
+        const hiddenSchoolInput = document.getElementById('school');
+        const noSchoolResults = document.getElementById('noSchoolResults');
+
+        // Открытие/закрытие списка
+        schoolTrigger.addEventListener('click', () => {
+            schoolSelect.classList.toggle('open');
+            if (schoolSelect.classList.contains('open')) {
+                schoolSearchInput.value = '';
+                filterSchools('');
+                schoolSearchInput.focus();
+            }
+        });
+
+        // Закрытие при клике вне списка
+        document.addEventListener('click', (e) => {
+            if (!schoolSelect.contains(e.target)) {
+                schoolSelect.classList.remove('open');
+            }
+        });
+
+        // Поиск по школам
+        schoolSearchInput.addEventListener('input', (e) => {
+            filterSchools(e.target.value);
+        });
+
+        function filterSchools(query) {
+            query = query.toLowerCase();
+            const options = schoolsOptionsContainer.querySelectorAll('.custom-option');
+            let hasVisible = false;
+
+            options.forEach(opt => {
+                if (opt.textContent.toLowerCase().includes(query)) {
+                    opt.classList.remove('hidden');
+                    hasVisible = true;
+                } else {
+                    opt.classList.add('hidden');
+                }
+            });
+
+            if (hasVisible) {
+                noSchoolResults.style.display = 'none';
+            } else {
+                noSchoolResults.style.display = 'block';
+            }
+        }
+
+        // Рендер списка школ в зависимости от языка
+        function renderSchoolDropdown() {
+            schoolsOptionsContainer.innerHTML = '';
+            schoolsData[currentLang].forEach((schoolName) => {
+                const div = document.createElement('div');
+                div.className = 'custom-option';
+                div.textContent = schoolName;
+                div.addEventListener('click', () => {
+                    schoolSelectedText.textContent = schoolName;
+                    schoolSelectedText.style.color = '#333';
+                    hiddenSchoolInput.value = schoolName;
+                    schoolSelect.classList.remove('open');
+                });
+                schoolsOptionsContainer.appendChild(div);
+            });
+
+            // Сбрасываем выбранное значение
+            hiddenSchoolInput.value = '';
+            schoolSelectedText.textContent = translations[currentLang].schoolPlaceholder;
+            schoolSelectedText.style.color = '#666';
+            schoolSearchInput.placeholder = translations[currentLang].searchPlaceholder;
+        }
+
+
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -799,10 +1101,12 @@
             });
         });
 
+        // Отправка формы
         document.getElementById('regForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const name = document.getElementById('name').value.trim();
+            const school = hiddenSchoolInput.value.trim(); // Берём из скрытого инпута
             
             if (!name) {
                 alert(translations[currentLang].alertName);
@@ -812,10 +1116,12 @@
                 alert(translations[currentLang].alertRole);
                 return;
             }
-            
-            // Проверяем, что если выбрана кастомная роль, то введен текст
             if (selectedRole === 'custom' && !customRoleInput.value.trim()) {
                 alert(translations[currentLang].alertRole);
+                return;
+            }
+            if (!school) {
+                alert(translations[currentLang].alertSchool);
                 return;
             }
 
@@ -829,7 +1135,6 @@
             submitBtn.disabled = true;
             submitBtn.textContent = translations[currentLang].submitting;
 
-            // Определяем роль для сохранения
             let roleToSave;
             if (selectedRole === 'custom') {
                 roleToSave = customRoleInput.value.trim();
@@ -855,12 +1160,18 @@
                         action: 'addRegistration',
                         name: name,
                         role: roleToSave, 
+                        school: school,
                         timestamp: new Date().toLocaleString('ru-RU')
                     })
                 });
 
                 document.getElementById('successMessage').classList.add('show');
+                
+                // Очистка формы
                 document.getElementById('name').value = '';
+                hiddenSchoolInput.value = '';
+                schoolSelectedText.textContent = translations[currentLang].schoolPlaceholder;
+                schoolSelectedText.style.color = '#666';
                 selectedRole = null;
                 roleSelect.value = '';
                 customRoleInput.value = '';
@@ -889,7 +1200,7 @@
             if (s.includes('завуч') || s.includes('оқу ісінің меңгерушісі')) return 'zavuch';
             if (s.includes('руководитель') || s.includes('жетекші')) return 'leader';
             if (s.includes('гость') || s.includes('қонақ')) return 'guest';
-            return 'other'; // Все кастомные роли
+            return 'other'; 
         }
 
         async function loadParticipants() {
@@ -936,18 +1247,20 @@
             listContainer.innerHTML = filtered
                 .reverse()
                 .map((reg, index) => {
-                    const[name, role, timestamp] = reg;
+                    let name = reg[0];
+                    let role = reg[1];
+                    let school = reg[2] || '—';
+                    let timestamp = reg[3] || reg[2];
+
+                    if (reg.length <= 3 && timestamp === school) {
+                        school = '—';
+                    }
                     
-                    // Создаём уникальный ID для участника
                     const participantId = `${name}-${timestamp}`;
-                    
-                    // Проверяем, показывали ли мы этого участника как нового
                     const isNew = !shownParticipants.has(participantId);
                     
-                    // Если участник новый, добавляем его в Set и убираем анимацию через 3 сек
                     if (isNew) {
                         shownParticipants.add(participantId);
-                        // Убираем класс 'new' после завершения анимации
                         setTimeout(() => {
                             const element = document.querySelector(`[data-participant-id="${participantId}"]`);
                             if (element) {
@@ -972,6 +1285,7 @@
                             <div class="participant-avatar">${roleIcon}</div>
                             <div class="participant-info">
                                 <div class="participant-name">${name}</div>
+                                <div class="participant-school">🏫 ${school}</div>
                                 <div class="participant-role">${role}</div>
                                 <div class="participant-time">${timestamp}</div>
                             </div>
@@ -1006,14 +1320,9 @@
              window.open(`https://docs.google.com/spreadsheets/d/${CONFIG.spreadsheetId}/edit`, '_blank');
         });
 
-        // Initialize
         loadParticipants();
         startAutoRefresh();
-        
-        // ВАЖНО: Мы НЕ вызываем setLanguage('kk') здесь автоматически.
-        // Язык выберет пользователь в начале.
-        // Можно поставить дефолтный текст на одном из языков "под низом", чтобы не было пусто
-        setLanguage('kk'); // Установим текст по умолчанию (на фоне), но оверлей будет сверху
+        setLanguage('kk'); 
     </script>
 </body>
 </html>
