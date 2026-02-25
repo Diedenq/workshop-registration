@@ -418,16 +418,15 @@
             text-align: center;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+        .stats-center {
+            display: flex;
+            justify-content: center;
             margin-top: 15px;
         }
 
         .stat-item { text-align: center; }
-        .stat-number { font-size: 36px; font-weight: bold; display: block; }
-        .stat-label { font-size: 14px; opacity: 0.9; margin-top: 5px; }
+        .stat-number { font-size: 42px; font-weight: bold; display: block; }
+        .stat-label { font-size: 16px; opacity: 0.9; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
 
         .participants-list {
             background: white;
@@ -606,9 +605,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label data-i18n="roleLabel">Сіз кімсіз:</label>
+                    <label data-i18n="roleLabel">Лауазымыңыз:</label>
                     <select id="roleSelect" class="role-select">
-                        <option value="" data-i18n="selectRole" selected>Атқаратын лауазымыңызды таңдаңыз</option>
+                        <option value="" data-i18n="selectRole" selected>Лауазымды таңдаңыз</option>
                         <option value="teacher" data-i18n="roleTeacher">👨‍🏫 Мұғалім</option>
                         <option value="student" data-i18n="roleStudent">👨‍🎓 Оқушы</option>
                         <option value="director" data-i18n="roleDirector">💼 Директор</option>
@@ -621,11 +620,10 @@
                 </div>
 
                 <div class="form-group" id="customRoleGroup" style="display: none;">
-                    <label data-i18n="labelCustomRole">Өз рөліңізді жазыңыз:</label>
+                    <label data-i18n="labelCustomRole">Өз лауазымыңызды жазыңыз:</label>
                     <input type="text" id="customRole" data-i18n-placeholder="customRolePlaceholder" placeholder="Мысалы: Психолог, Тәрбиеші...">
                 </div>
 
-                <!-- КАСТОМНЫЙ ПОИСКОВЫЙ СПИСОК ШКОЛ -->
                 <div class="form-group custom-select-wrapper">
                     <label data-i18n="schoolLabel">Мектебіңіз:</label>
                     <div class="custom-select" id="schoolSelect">
@@ -643,7 +641,6 @@
                             <div class="no-results" id="noSchoolResults" data-i18n="noResults">Мектеп табылмады</div>
                         </div>
                     </div>
-                    <!-- Скрытое поле для отправки значения -->
                     <input type="hidden" id="school">
                 </div>
 
@@ -676,18 +673,11 @@
 
             <div class="stats-header">
                 <h2 data-i18n="participantsTitle">Тіркелген қатысушылар</h2>
-                <div class="stats-grid">
+                <!-- ТОЛЬКО ОБЩЕЕ КОЛИЧЕСТВО ПО ЦЕНТРУ -->
+                <div class="stats-center">
                     <div class="stat-item">
                         <span class="stat-number" id="totalCount">0</span>
                         <span class="stat-label" data-i18n="total">Барлығы</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="teacherCount">0</span>
-                        <span class="stat-label" data-i18n="teachers">Мұғалімдер</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="studentCount">0</span>
-                        <span class="stat-label" data-i18n="students">Оқушылар</span>
                     </div>
                 </div>
             </div>
@@ -737,7 +727,6 @@
             refreshInterval: 5000
         };
 
-        // ДАННЫЕ ДЛЯ ШКОЛ (На двух языках)
         const schoolsData = {
             kk:[
                 "«Абылай хан атындағы орта мектеп» КММ",
@@ -847,8 +836,8 @@
                 regSubtitle: "Қатысу үшін форманы толтырыңыз",
                 nameLabel: "Сіздің атыңыз",
                 namePlaceholder: "Аты-жөніңізді енгізіңіз",
-                roleLabel: "Сіз кімсіз:",
-                selectRole: "Атқаратын лауазымыңызды таңдаңыз",
+                roleLabel: "Лауазымыңыз:",
+                selectRole: "Лауазымды таңдаңыз",
                 roleTeacher: "👨‍🏫 Мұғалім",
                 roleStudent: "👨‍🎓 Оқушы",
                 roleDirector: "💼 Директор",
@@ -857,7 +846,7 @@
                 roleLeader: "🎯 Жетекші",
                 roleGuest: "👤 Қонақ",
                 roleCustom: "✏️ Басқа (өзін жазу)",
-                labelCustomRole: "Өз рөліңізді жазыңыз:",
+                labelCustomRole: "Өз лауазымыңызды жазыңыз:",
                 customRolePlaceholder: "Мысалы: Психолог, Тәрбиеші...",
                 schoolLabel: "Мектебіңіз:",
                 schoolPlaceholder: "Тізімнен мектепті таңдаңыз...",
@@ -872,8 +861,6 @@
                 qrPlaceholder: "📱 QR код орны<br><small>Суретті кодқа жүктеңіз</small>",
                 participantsTitle: "Тіркелген қатысушылар",
                 total: "Барлығы",
-                teachers: "Мұғалімдер",
-                students: "Оқушылар",
                 filterAll: "Барлығы",
                 filterTeacher: "👨‍🏫 Мұғалімдер",
                 filterStudent: "👨‍🎓 Оқушылар",
@@ -892,7 +879,7 @@
                 backBtn: "← Артқа",
                 newParticipant: "✨ Жаңа қатысушы!",
                 alertName: "Өтінеміз, атыңызды енгізіңіз",
-                alertRole: "Өтінеміз, рөліңізді таңдаңыз",
+                alertRole: "Өтінеміз, лауазымыңызды таңдаңыз",
                 alertSchool: "Өтінеміз, мектебіңізді таңдаңыз"
             },
             ru: {
@@ -900,7 +887,7 @@
                 regSubtitle: "Заполните форму для участия",
                 nameLabel: "Ваше имя",
                 namePlaceholder: "Введите ваше имя",
-                roleLabel: "Вы являетесь:",
+                roleLabel: "Ваша должность:",
                 selectRole: "Выберите должность",
                 roleTeacher: "👨‍🏫 Учитель",
                 roleStudent: "👨‍🎓 Ученик",
@@ -925,8 +912,6 @@
                 qrPlaceholder: "📱 Место для QR-кода<br><small>Загрузите изображение в код</small>",
                 participantsTitle: "Зарегистрированные участники",
                 total: "Всего",
-                teachers: "Учителей",
-                students: "Учеников",
                 filterAll: "Все",
                 filterTeacher: "👨‍🏫 Учителя",
                 filterStudent: "👨‍🎓 Ученики",
@@ -980,7 +965,6 @@
                 }
             });
 
-            // Обновляем список школ при смене языка
             renderSchoolDropdown();
 
             if (participantsData.length > 0) {
@@ -1025,7 +1009,6 @@
         const hiddenSchoolInput = document.getElementById('school');
         const noSchoolResults = document.getElementById('noSchoolResults');
 
-        // Открытие/закрытие списка
         schoolTrigger.addEventListener('click', () => {
             schoolSelect.classList.toggle('open');
             if (schoolSelect.classList.contains('open')) {
@@ -1035,14 +1018,12 @@
             }
         });
 
-        // Закрытие при клике вне списка
         document.addEventListener('click', (e) => {
             if (!schoolSelect.contains(e.target)) {
                 schoolSelect.classList.remove('open');
             }
         });
 
-        // Поиск по школам
         schoolSearchInput.addEventListener('input', (e) => {
             filterSchools(e.target.value);
         });
@@ -1068,7 +1049,6 @@
             }
         }
 
-        // Рендер списка школ в зависимости от языка
         function renderSchoolDropdown() {
             schoolsOptionsContainer.innerHTML = '';
             schoolsData[currentLang].forEach((schoolName) => {
@@ -1084,7 +1064,6 @@
                 schoolsOptionsContainer.appendChild(div);
             });
 
-            // Сбрасываем выбранное значение
             hiddenSchoolInput.value = '';
             schoolSelectedText.textContent = translations[currentLang].schoolPlaceholder;
             schoolSelectedText.style.color = '#666';
@@ -1106,7 +1085,7 @@
             e.preventDefault();
             
             const name = document.getElementById('name').value.trim();
-            const school = hiddenSchoolInput.value.trim(); // Берём из скрытого инпута
+            const school = hiddenSchoolInput.value.trim(); 
             
             if (!name) {
                 alert(translations[currentLang].alertName);
@@ -1167,7 +1146,6 @@
 
                 document.getElementById('successMessage').classList.add('show');
                 
-                // Очистка формы
                 document.getElementById('name').value = '';
                 hiddenSchoolInput.value = '';
                 schoolSelectedText.textContent = translations[currentLang].schoolPlaceholder;
@@ -1216,13 +1194,9 @@
                 }
                 lastParticipantsCount = registrations.length;
                 participantsData = registrations;
-
-                const teachers = registrations.filter(r => normalizeRole(r[1]) === 'teacher').length;
-                const students = registrations.filter(r => normalizeRole(r[1]) === 'student').length;
                 
+                // Оставляем только общий счетчик по центру
                 document.getElementById('totalCount').textContent = registrations.length;
-                document.getElementById('teacherCount').textContent = teachers;
-                document.getElementById('studentCount').textContent = students;
 
                 renderParticipants();
 
