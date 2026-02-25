@@ -95,7 +95,7 @@
 
         /* ------------------------------------- */
 
-        /* Языковой переключатель (оставим его маленьким в углу на всякий случай) */
+        /* Языковой переключатель */
         .lang-switcher {
             position: absolute;
             top: 20px;
@@ -242,31 +242,27 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .role-buttons { display: grid; gap: 12px; }
-
-        .role-btn {
-            padding: 18px;
+        .role-select {
+            width: 100%;
+            padding: 15px;
             border: 2px solid #e0e0e0;
-            background: white;
             border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
             font-size: 16px;
-            font-weight: 600;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            transition: all 0.3s;
+            background: white;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667eea' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            padding-right: 45px;
         }
 
-        .role-btn:hover { border-color: #667eea; background: #f8f9ff; }
-        .role-btn.selected {
+        .role-select:focus {
+            outline: none;
             border-color: #667eea;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
-
-        .role-icon { font-size: 24px; }
 
         .submit-btn {
             width: 100%;
@@ -371,14 +367,56 @@
             align-items: center;
             gap: 15px;
             transition: all 0.3s;
-            animation: fadeIn 0.5s ease;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-
         .participant-item:hover { background: #f8f9ff; }
-        .participant-item.new { background: #e8f5e9; animation: highlight 2s ease; }
-        @keyframes highlight { 0% { background: #4caf50; } 100% { background: transparent; } }
+        
+        /* ПЛАВНАЯ АНИМАЦИЯ НОВЫХ ГОСТЕЙ */
+        .participant-item.new { 
+            position: relative;
+            overflow: hidden;
+            animation: smoothAppear 3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        /* Үстінен жүгіріп өтетін ақ жарқыл (блик) эффектісі */
+        .participant-item.new::after {
+            content: '';
+            position: absolute;
+            top: 0; 
+            left: -100%; 
+            width: 50%; 
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            transform: skewX(-20deg);
+            animation: shimmer 1.5s ease-in-out forwards;
+        }
+
+        /* Жұмсақ пайда болу және түстің тегіс жоғалуы */
+        @keyframes smoothAppear { 
+            0% { 
+                opacity: 0; 
+                transform: translateX(-30px); /* Сәл сол жақтан сырғып келеді */
+                background-color: rgba(76, 175, 80, 0.2); /* Жұмсақ жасыл фон */
+                box-shadow: inset 4px 0 0 #4caf50; /* Сол жағындағы жасыл сызық */
+            }
+            15% { 
+                opacity: 1; 
+                transform: translateX(0); /* Өз орнына келеді */
+                background-color: rgba(76, 175, 80, 0.15);
+                box-shadow: inset 4px 0 0 #4caf50;
+            }
+            100% { 
+                opacity: 1;
+                transform: translateX(0);
+                background-color: transparent; /* Түс біртіндеп мөлдірге айналады */
+                box-shadow: inset 0 0 0 transparent; /* Сызық та жоғалады */
+            } 
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
 
         .participant-avatar {
             width: 50px;
@@ -473,20 +511,22 @@
 
                 <div class="form-group">
                     <label data-i18n="roleLabel">Сіз кімсіз:</label>
-                    <div class="role-buttons">
-                        <div class="role-btn" data-role="teacher">
-                            <span class="role-icon">👨‍🏫</span>
-                            <span data-i18n="roleTeacher">Мұғалім</span>
-                        </div>
-                        <div class="role-btn" data-role="student">
-                            <span class="role-icon">👨‍🎓</span>
-                            <span data-i18n="roleStudent">Оқушы</span>
-                        </div>
-                        <div class="role-btn" data-role="guest">
-                            <span class="role-icon">👤</span>
-                            <span data-i18n="roleGuest">Қонақ</span>
-                        </div>
-                    </div>
+                    <select id="roleSelect" class="role-select">
+                        <option value="" data-i18n="selectRole" selected>Рөлді таңдаңыз</option>
+                        <option value="teacher" data-i18n="roleTeacher">👨‍🏫 Мұғалім</option>
+                        <option value="student" data-i18n="roleStudent">👨‍🎓 Оқушы</option>
+                        <option value="director" data-i18n="roleDirector">💼 Директор</option>
+                        <option value="parent" data-i18n="roleParent">👨‍👩‍👦 Ата-ана</option>
+                        <option value="zavuch" data-i18n="roleZavuch">📋 Оқу ісінің меңгерушісі</option>
+                        <option value="leader" data-i18n="roleLeader">🎯 Жетекші</option>
+                        <option value="guest" data-i18n="roleGuest">👤 Қонақ</option>
+                        <option value="custom" data-i18n="roleCustom">✏️ Басқа (өзін жазу)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="customRoleGroup" style="display: none;">
+                    <label data-i18n="labelCustomRole">Өз рөліңізді жазыңыз:</label>
+                    <input type="text" id="customRole" data-i18n-placeholder="customRolePlaceholder" placeholder="Мысалы: Психолог, Тәрбиеші...">
                 </div>
 
                 <button type="submit" class="submit-btn" id="submitBtn" data-i18n="submitBtn">Тіркелу</button>
@@ -539,7 +579,12 @@
                     <button class="filter-btn active" data-filter="all" data-i18n="filterAll">Барлығы</button>
                     <button class="filter-btn" data-filter="teacher" data-i18n="filterTeacher">👨‍🏫 Мұғалімдер</button>
                     <button class="filter-btn" data-filter="student" data-i18n="filterStudent">👨‍🎓 Оқушылар</button>
+                    <button class="filter-btn" data-filter="director" data-i18n="filterDirector">💼 Директорлар</button>
+                    <button class="filter-btn" data-filter="parent" data-i18n="filterParent">👨‍👩‍👦 Ата-аналар</button>
+                    <button class="filter-btn" data-filter="zavuch" data-i18n="filterZavuch">📋 Завучтар</button>
+                    <button class="filter-btn" data-filter="leader" data-i18n="filterLeader">🎯 Жетекшілер</button>
                     <button class="filter-btn" data-filter="guest" data-i18n="filterGuest">👤 Қонақтар</button>
+                    <button class="filter-btn" data-filter="other" data-i18n="filterOther">✏️ Басқалар</button>
                 </div>
                 
                 <div id="participantsList">
@@ -581,9 +626,17 @@
                 nameLabel: "Сіздің атыңыз",
                 namePlaceholder: "Аты-жөніңізді енгізіңіз",
                 roleLabel: "Сіз кімсіз:",
-                roleTeacher: "Мұғалім",
-                roleStudent: "Оқушы",
-                roleGuest: "Қонақ",
+                selectRole: "Рөлді таңдаңыз",
+                roleTeacher: "👨‍🏫 Мұғалім",
+                roleStudent: "👨‍🎓 Оқушы",
+                roleDirector: "💼 Директор",
+                roleParent: "👨‍👩‍👦 Ата-ана",
+                roleZavuch: "📋 Оқу ісінің меңгерушісі",
+                roleLeader: "🎯 Жетекші",
+                roleGuest: "👤 Қонақ",
+                roleCustom: "✏️ Басқа (өзін жазу)",
+                labelCustomRole: "Өз рөліңізді жазыңыз:",
+                customRolePlaceholder: "Мысалы: Психолог, Тәрбиеші...",
                 submitBtn: "Тіркелу",
                 submitting: "Тіркелу...",
                 successMsg: "✅ Сіз сәтті тіркелдіңіз!",
@@ -598,7 +651,12 @@
                 filterAll: "Барлығы",
                 filterTeacher: "👨‍🏫 Мұғалімдер",
                 filterStudent: "👨‍🎓 Оқушылар",
+                filterDirector: "💼 Директорлар",
+                filterParent: "👨‍👩‍👦 Ата-аналар",
+                filterZavuch: "📋 Завучтар",
+                filterLeader: "🎯 Жетекшілер",
                 filterGuest: "👤 Қонақтар",
+                filterOther: "✏️ Басқалар",
                 loading: "Қатысушылар жүктелуде...",
                 empty: "Әзірге ешкім тіркелмеді",
                 setupNeeded: "Google Sheets интеграциясын баптаңыз",
@@ -616,9 +674,17 @@
                 nameLabel: "Ваше имя",
                 namePlaceholder: "Введите ваше имя",
                 roleLabel: "Вы являетесь:",
-                roleTeacher: "Учитель",
-                roleStudent: "Ученик",
-                roleGuest: "Гость",
+                selectRole: "Выберите роль",
+                roleTeacher: "👨‍🏫 Учитель",
+                roleStudent: "👨‍🎓 Ученик",
+                roleDirector: "💼 Директор",
+                roleParent: "👨‍👩‍👦 Родитель",
+                roleZavuch: "📋 Завуч",
+                roleLeader: "🎯 Руководитель",
+                roleGuest: "👤 Гость",
+                roleCustom: "✏️ Другое (написать свою)",
+                labelCustomRole: "Напишите свою роль:",
+                customRolePlaceholder: "Например: Психолог, Воспитатель...",
                 submitBtn: "Зарегистрироваться",
                 submitting: "Регистрация...",
                 successMsg: "✅ Вы успешно зарегистрированы!",
@@ -633,7 +699,12 @@
                 filterAll: "Все",
                 filterTeacher: "👨‍🏫 Учителя",
                 filterStudent: "👨‍🎓 Ученики",
+                filterDirector: "💼 Директора",
+                filterParent: "👨‍👩‍👦 Родители",
+                filterZavuch: "📋 Завучи",
+                filterLeader: "🎯 Руководители",
                 filterGuest: "👤 Гости",
+                filterOther: "✏️ Другие",
                 loading: "Загрузка участников...",
                 empty: "Пока никто не зарегистрировался",
                 setupNeeded: "Настройте интеграцию с Google Sheets",
@@ -699,14 +770,24 @@
         let selectedRole = null;
         let currentFilter = 'all';
         let lastParticipantsCount = 0;
-        let participantsData = [];
+        let participantsData =[];
+        let shownParticipants = new Set(); // Отслеживание уже показанных участников
 
-        document.querySelectorAll('.role-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
-                this.classList.add('selected');
-                selectedRole = this.dataset.role;
-            });
+        // Обработчик выбора роли
+        const roleSelect = document.getElementById('roleSelect');
+        const customRoleGroup = document.getElementById('customRoleGroup');
+        const customRoleInput = document.getElementById('customRole');
+        
+        roleSelect.addEventListener('change', function() {
+            selectedRole = this.value;
+            if (this.value === 'custom') {
+                customRoleGroup.style.display = 'block';
+                customRoleInput.required = true;
+            } else {
+                customRoleGroup.style.display = 'none';
+                customRoleInput.required = false;
+                customRoleInput.value = '';
+            }
         });
 
         document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -731,6 +812,12 @@
                 alert(translations[currentLang].alertRole);
                 return;
             }
+            
+            // Проверяем, что если выбрана кастомная роль, то введен текст
+            if (selectedRole === 'custom' && !customRoleInput.value.trim()) {
+                alert(translations[currentLang].alertRole);
+                return;
+            }
 
             if (CONFIG.webAppUrl.includes('YOUR_WEB_APP_URL')) {
                 document.getElementById('errorMessage').textContent = translations[currentLang].setupNeeded;
@@ -742,12 +829,22 @@
             submitBtn.disabled = true;
             submitBtn.textContent = translations[currentLang].submitting;
 
-            const roleKeyMap = {
-                'teacher': 'roleTeacher',
-                'student': 'roleStudent',
-                'guest': 'roleGuest'
-            };
-            const roleToSave = translations[currentLang][roleKeyMap[selectedRole]];
+            // Определяем роль для сохранения
+            let roleToSave;
+            if (selectedRole === 'custom') {
+                roleToSave = customRoleInput.value.trim();
+            } else {
+                const roleKeyMap = {
+                    'teacher': 'roleTeacher',
+                    'student': 'roleStudent',
+                    'director': 'roleDirector',
+                    'parent': 'roleParent',
+                    'zavuch': 'roleZavuch',
+                    'leader': 'roleLeader',
+                    'guest': 'roleGuest'
+                };
+                roleToSave = translations[currentLang][roleKeyMap[selectedRole]];
+            }
 
             try {
                 await fetch(CONFIG.webAppUrl, {
@@ -765,7 +862,9 @@
                 document.getElementById('successMessage').classList.add('show');
                 document.getElementById('name').value = '';
                 selectedRole = null;
-                document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
+                roleSelect.value = '';
+                customRoleInput.value = '';
+                customRoleGroup.style.display = 'none';
                 
                 setTimeout(() => loadParticipants(), 1000);
                 setTimeout(() => document.getElementById('successMessage').classList.remove('show'), 3000);
@@ -781,11 +880,16 @@
         });
 
         function normalizeRole(roleString) {
-            if (!roleString) return 'guest';
+            if (!roleString) return 'other';
             const s = roleString.toLowerCase();
             if (s.includes('учитель') || s.includes('мұғалім')) return 'teacher';
             if (s.includes('ученик') || s.includes('оқушы')) return 'student';
-            return 'guest';
+            if (s.includes('директор')) return 'director';
+            if (s.includes('родитель') || s.includes('ата-ана')) return 'parent';
+            if (s.includes('завуч') || s.includes('оқу ісінің меңгерушісі')) return 'zavuch';
+            if (s.includes('руководитель') || s.includes('жетекші')) return 'leader';
+            if (s.includes('гость') || s.includes('қонақ')) return 'guest';
+            return 'other'; // Все кастомные роли
         }
 
         async function loadParticipants() {
@@ -794,7 +898,7 @@
             try {
                 const response = await fetch(`${CONFIG.webAppUrl}?action=getRegistrations`);
                 const data = await response.json();
-                const registrations = data.registrations || [];
+                const registrations = data.registrations ||[];
 
                 if (registrations.length > lastParticipantsCount && lastParticipantsCount > 0) {
                     showRefreshIndicator();
@@ -832,17 +936,39 @@
             listContainer.innerHTML = filtered
                 .reverse()
                 .map((reg, index) => {
-                    const [name, role, timestamp] = reg;
+                    const[name, role, timestamp] = reg;
+                    
+                    // Создаём уникальный ID для участника
+                    const participantId = `${name}-${timestamp}`;
+                    
+                    // Проверяем, показывали ли мы этого участника как нового
+                    const isNew = !shownParticipants.has(participantId);
+                    
+                    // Если участник новый, добавляем его в Set и убираем анимацию через 3 сек
+                    if (isNew) {
+                        shownParticipants.add(participantId);
+                        // Убираем класс 'new' после завершения анимации
+                        setTimeout(() => {
+                            const element = document.querySelector(`[data-participant-id="${participantId}"]`);
+                            if (element) {
+                                element.classList.remove('new');
+                            }
+                        }, 3000);
+                    }
                     
                     const nRole = normalizeRole(role);
                     let roleIcon = '👤';
                     if (nRole === 'teacher') roleIcon = '👨‍🏫';
                     if (nRole === 'student') roleIcon = '👨‍🎓';
-
-                    const isNew = index === 0 && lastParticipantsCount > 0;
+                    if (nRole === 'director') roleIcon = '💼';
+                    if (nRole === 'parent') roleIcon = '👨‍👩‍👦';
+                    if (nRole === 'zavuch') roleIcon = '📋';
+                    if (nRole === 'leader') roleIcon = '🎯';
+                    if (nRole === 'guest') roleIcon = '👤';
+                    if (nRole === 'other') roleIcon = '✏️';
 
                     return `
-                        <div class="participant-item ${isNew ? 'new' : ''}">
+                        <div class="participant-item ${isNew ? 'new' : ''}" data-participant-id="${participantId}">
                             <div class="participant-avatar">${roleIcon}</div>
                             <div class="participant-info">
                                 <div class="participant-name">${name}</div>
