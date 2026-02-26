@@ -441,6 +441,7 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .filter-btn {
@@ -608,20 +609,15 @@
                     <label data-i18n="roleLabel">Лауазымыңыз:</label>
                     <select id="roleSelect" class="role-select">
                         <option value="" data-i18n="selectRole" selected>Лауазымды таңдаңыз</option>
-                        <option value="teacher" data-i18n="roleTeacher">👨‍🏫 Мұғалім</option>
-                        <option value="student" data-i18n="roleStudent">👨‍🎓 Оқушы</option>
-                        <option value="director" data-i18n="roleDirector">💼 Директор</option>
+                        <option value="zavuch_vr" data-i18n="roleZavuchVR">📋 Директордың тәрбие ісі жөніндегі орынбасары</option>
                         <option value="parent" data-i18n="roleParent">👨‍👩‍👦 Ата-ана</option>
-                        <option value="zavuch" data-i18n="roleZavuch">📋 Оқу ісінің меңгерушісі</option>
-                        <option value="leader" data-i18n="roleLeader">🎯 Жетекші</option>
-                        <option value="guest" data-i18n="roleGuest">👤 Қонақ</option>
                         <option value="custom" data-i18n="roleCustom">✏️ Басқа (өзін жазу)</option>
                     </select>
                 </div>
 
                 <div class="form-group" id="customRoleGroup" style="display: none;">
                     <label data-i18n="labelCustomRole">Өз лауазымыңызды жазыңыз:</label>
-                    <input type="text" id="customRole" data-i18n-placeholder="customRolePlaceholder" placeholder="Мысалы: Психолог, Тәрбиеші...">
+                    <input type="text" id="customRole" data-i18n-placeholder="customRolePlaceholder" placeholder="Мысалы: Психолог, Мұғалім...">
                 </div>
 
                 <div class="form-group custom-select-wrapper">
@@ -673,7 +669,6 @@
 
             <div class="stats-header">
                 <h2 data-i18n="participantsTitle">Тіркелген қатысушылар</h2>
-                <!-- ТОЛЬКО ОБЩЕЕ КОЛИЧЕСТВО ПО ЦЕНТРУ -->
                 <div class="stats-center">
                     <div class="stat-item">
                         <span class="stat-number" id="totalCount">0</span>
@@ -685,13 +680,8 @@
             <div class="participants-list">
                 <div class="list-controls">
                     <button class="filter-btn active" data-filter="all" data-i18n="filterAll">Барлығы</button>
-                    <button class="filter-btn" data-filter="teacher" data-i18n="filterTeacher">👨‍🏫 Мұғалімдер</button>
-                    <button class="filter-btn" data-filter="student" data-i18n="filterStudent">👨‍🎓 Оқушылар</button>
-                    <button class="filter-btn" data-filter="director" data-i18n="filterDirector">💼 Директорлар</button>
+                    <button class="filter-btn" data-filter="zavuch_vr" data-i18n="filterZavuchVR">📋 Тәрбие ісі жөніндегі орынбасарлар</button>
                     <button class="filter-btn" data-filter="parent" data-i18n="filterParent">👨‍👩‍👦 Ата-аналар</button>
-                    <button class="filter-btn" data-filter="zavuch" data-i18n="filterZavuch">📋 Завучтар</button>
-                    <button class="filter-btn" data-filter="leader" data-i18n="filterLeader">🎯 Жетекшілер</button>
-                    <button class="filter-btn" data-filter="guest" data-i18n="filterGuest">👤 Қонақтар</button>
                     <button class="filter-btn" data-filter="other" data-i18n="filterOther">✏️ Басқалар</button>
                 </div>
                 
@@ -838,16 +828,11 @@
                 namePlaceholder: "Аты-жөніңізді енгізіңіз",
                 roleLabel: "Лауазымыңыз:",
                 selectRole: "Лауазымды таңдаңыз",
-                roleTeacher: "👨‍🏫 Мұғалім",
-                roleStudent: "👨‍🎓 Оқушы",
-                roleDirector: "💼 Директор",
+                roleZavuchVR: "📋 Директордың тәрбие ісі жөніндегі орынбасары",
                 roleParent: "👨‍👩‍👦 Ата-ана",
-                roleZavuch: "📋 Оқу ісінің меңгерушісі",
-                roleLeader: "🎯 Жетекші",
-                roleGuest: "👤 Қонақ",
                 roleCustom: "✏️ Басқа (өзін жазу)",
                 labelCustomRole: "Өз лауазымыңызды жазыңыз:",
-                customRolePlaceholder: "Мысалы: Психолог, Тәрбиеші...",
+                customRolePlaceholder: "Мысалы: Психолог, Мұғалім...",
                 schoolLabel: "Мектебіңіз:",
                 schoolPlaceholder: "Тізімнен мектепті таңдаңыз...",
                 searchPlaceholder: "Мектепті іздеу...",
@@ -862,13 +847,8 @@
                 participantsTitle: "Тіркелген қатысушылар",
                 total: "Барлығы",
                 filterAll: "Барлығы",
-                filterTeacher: "👨‍🏫 Мұғалімдер",
-                filterStudent: "👨‍🎓 Оқушылар",
-                filterDirector: "💼 Директорлар",
+                filterZavuchVR: "📋 Тәрбие ісі жөніндегі орынбасарлар",
                 filterParent: "👨‍👩‍👦 Ата-аналар",
-                filterZavuch: "📋 Завучтар",
-                filterLeader: "🎯 Жетекшілер",
-                filterGuest: "👤 Қонақтар",
                 filterOther: "✏️ Басқалар",
                 loading: "Қатысушылар жүктелуде...",
                 empty: "Әзірге ешкім тіркелмеді",
@@ -889,16 +869,11 @@
                 namePlaceholder: "Введите ваше имя",
                 roleLabel: "Ваша должность:",
                 selectRole: "Выберите должность",
-                roleTeacher: "👨‍🏫 Учитель",
-                roleStudent: "👨‍🎓 Ученик",
-                roleDirector: "💼 Директор",
+                roleZavuchVR: "📋 Заместитель директора по ВР",
                 roleParent: "👨‍👩‍👦 Родитель",
-                roleZavuch: "📋 Завуч",
-                roleLeader: "🎯 Руководитель",
-                roleGuest: "👤 Гость",
                 roleCustom: "✏️ Другое (написать свою)",
                 labelCustomRole: "Напишите свою должность:",
-                customRolePlaceholder: "Например: Психолог, Воспитатель...",
+                customRolePlaceholder: "Например: Психолог, Учитель...",
                 schoolLabel: "Ваша школа:",
                 schoolPlaceholder: "Выберите школу из списка...",
                 searchPlaceholder: "Поиск школы...",
@@ -913,13 +888,8 @@
                 participantsTitle: "Зарегистрированные участники",
                 total: "Всего",
                 filterAll: "Все",
-                filterTeacher: "👨‍🏫 Учителя",
-                filterStudent: "👨‍🎓 Ученики",
-                filterDirector: "💼 Директора",
+                filterZavuchVR: "📋 Зам. директора по ВР",
                 filterParent: "👨‍👩‍👦 Родители",
-                filterZavuch: "📋 Завучи",
-                filterLeader: "🎯 Руководители",
-                filterGuest: "👤 Гости",
                 filterOther: "✏️ Другие",
                 loading: "Загрузка участников...",
                 empty: "Пока никто не зарегистрировался",
@@ -1119,13 +1089,8 @@
                 roleToSave = customRoleInput.value.trim();
             } else {
                 const roleKeyMap = {
-                    'teacher': 'roleTeacher',
-                    'student': 'roleStudent',
-                    'director': 'roleDirector',
-                    'parent': 'roleParent',
-                    'zavuch': 'roleZavuch',
-                    'leader': 'roleLeader',
-                    'guest': 'roleGuest'
+                    'zavuch_vr': 'roleZavuchVR',
+                    'parent': 'roleParent'
                 };
                 roleToSave = translations[currentLang][roleKeyMap[selectedRole]];
             }
@@ -1168,16 +1133,12 @@
             submitBtn.textContent = translations[currentLang].submitBtn;
         });
 
+        // Умный поиск для фильтра
         function normalizeRole(roleString) {
             if (!roleString) return 'other';
             const s = roleString.toLowerCase();
-            if (s.includes('учитель') || s.includes('мұғалім')) return 'teacher';
-            if (s.includes('ученик') || s.includes('оқушы')) return 'student';
-            if (s.includes('директор')) return 'director';
+            if (s.includes('тәрбие') || s.includes('заместитель') || s.includes('зам')) return 'zavuch_vr';
             if (s.includes('родитель') || s.includes('ата-ана')) return 'parent';
-            if (s.includes('завуч') || s.includes('оқу ісінің меңгерушісі')) return 'zavuch';
-            if (s.includes('руководитель') || s.includes('жетекші')) return 'leader';
-            if (s.includes('гость') || s.includes('қонақ')) return 'guest';
             return 'other'; 
         }
 
@@ -1195,7 +1156,6 @@
                 lastParticipantsCount = registrations.length;
                 participantsData = registrations;
                 
-                // Оставляем только общий счетчик по центру
                 document.getElementById('totalCount').textContent = registrations.length;
 
                 renderParticipants();
@@ -1245,13 +1205,8 @@
                     
                     const nRole = normalizeRole(role);
                     let roleIcon = '👤';
-                    if (nRole === 'teacher') roleIcon = '👨‍🏫';
-                    if (nRole === 'student') roleIcon = '👨‍🎓';
-                    if (nRole === 'director') roleIcon = '💼';
+                    if (nRole === 'zavuch_vr') roleIcon = '📋';
                     if (nRole === 'parent') roleIcon = '👨‍👩‍👦';
-                    if (nRole === 'zavuch') roleIcon = '📋';
-                    if (nRole === 'leader') roleIcon = '🎯';
-                    if (nRole === 'guest') roleIcon = '👤';
                     if (nRole === 'other') roleIcon = '✏️';
 
                     return `
