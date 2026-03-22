@@ -351,6 +351,16 @@
             color: #667eea;
             font-weight: 600;
         }
+        /* Опция "другая школа" — выделена */
+        .custom-option.custom-school-option {
+            color: #667eea;
+            font-weight: 700;
+            background: #f8f9ff;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .custom-option.custom-school-option:hover {
+            background: #eef0ff;
+        }
         .custom-option.hidden { display: none; }
         .no-results {
             padding: 15px;
@@ -528,7 +538,7 @@
         .participant-info { flex: 1; }
         .participant-name { font-weight: 600; color: #333; font-size: 16px; margin-bottom: 3px; }
         .participant-school { font-size: 13px; color: #667eea; font-weight: 600; margin-bottom: 2px; }
-        .participant-role { font-size: 14px; color: #666; }
+        .participant-discipline { font-size: 14px; color: #666; }
         .participant-time { font-size: 12px; color: #999; margin-top: 2px;}
 
         .loading, .empty-state { text-align: center; padding: 40px; color: #999; }
@@ -600,28 +610,28 @@
             </div>
 
             <form id="regForm">
+                <!-- Имя -->
                 <div class="form-group">
                     <label for="name" data-i18n="nameLabel">Сіздің атыңыз</label>
                     <input type="text" id="name" data-i18n-placeholder="namePlaceholder" placeholder="Аты-жөніңізді енгізіңіз" required>
                 </div>
 
+                <!-- Дисциплина -->
                 <div class="form-group">
-                    <label data-i18n="roleLabel">Лауазымыңыз:</label>
-                    <select id="roleSelect" class="role-select">
-                        <option value="" data-i18n="selectRole" selected>Лауазымды таңдаңыз</option>
-                        <option value="zavuch_vr" data-i18n="roleZavuchVR">📋 Директордың тәрбие ісі жөніндегі орынбасары</option>
-                        <option value="parent" data-i18n="roleParent">👨‍👩‍👦 Ата-ана</option>
-                        <option value="custom" data-i18n="roleCustom">✏️ Басқа (өзін жазу)</option>
+                    <label data-i18n="disciplineLabel">Пән (дисциплина):</label>
+                    <select id="disciplineSelect" class="role-select">
+                        <option value="" data-i18n="selectDiscipline" selected>Пәнді таңдаңыз</option>
+                        <option value="asyk_atu">🎯 Асық ату</option>
+                        <option value="ustel_tennis">🏓 Үстел теннисы</option>
+                        <option value="bes_asyk">🎲 Бес асық</option>
+                        <option value="shakhmат">♟️ Шахмат</option>
+                        <option value="togyz">⚫ Тоғызқұмалақ</option>
                     </select>
                 </div>
 
-                <div class="form-group" id="customRoleGroup" style="display: none;">
-                    <label data-i18n="labelCustomRole">Өз лауазымыңызды жазыңыз:</label>
-                    <input type="text" id="customRole" data-i18n-placeholder="customRolePlaceholder" placeholder="Мысалы: Психолог, Мұғалім...">
-                </div>
-
+                <!-- Школа (опциональная, с возможностью написать свою) -->
                 <div class="form-group custom-select-wrapper">
-                    <label data-i18n="schoolLabel">Мектебіңіз:</label>
+                    <label data-i18n="schoolLabel">Мектебіңіз: <span style="color:#999; font-weight:400;" data-i18n="schoolOptional">(міндетті емес)</span></label>
                     <div class="custom-select" id="schoolSelect">
                         <div class="custom-select-trigger" id="schoolTrigger">
                             <span id="schoolSelectedText" data-i18n="schoolPlaceholder">Тізімнен мектепті таңдаңыз...</span>
@@ -632,12 +642,18 @@
                                 <input type="text" id="schoolSearchInput" placeholder="Іздеу..." autocomplete="off">
                             </div>
                             <div class="options-container" id="schoolsOptionsContainer">
-                                <!-- Опции будут добавлены через JS -->
+                                <!-- Опции добавляются через JS -->
                             </div>
                             <div class="no-results" id="noSchoolResults" data-i18n="noResults">Мектеп табылмады</div>
                         </div>
                     </div>
                     <input type="hidden" id="school">
+                </div>
+
+                <!-- Поле для ввода своей школы (показывается при выборе "Другая") -->
+                <div class="form-group" id="customSchoolGroup" style="display: none;">
+                    <label data-i18n="labelCustomSchool">Мектептің атауын жазыңыз:</label>
+                    <input type="text" id="customSchool" data-i18n-placeholder="customSchoolPlaceholder" placeholder="Мектептің толық атауы...">
                 </div>
 
                 <button type="submit" class="submit-btn" id="submitBtn" data-i18n="submitBtn">Тіркелу</button>
@@ -680,9 +696,11 @@
             <div class="participants-list">
                 <div class="list-controls">
                     <button class="filter-btn active" data-filter="all" data-i18n="filterAll">Барлығы</button>
-                    <button class="filter-btn" data-filter="zavuch_vr" data-i18n="filterZavuchVR">📋 Тәрбие ісі жөніндегі орынбасарлар</button>
-                    <button class="filter-btn" data-filter="parent" data-i18n="filterParent">👨‍👩‍👦 Ата-аналар</button>
-                    <button class="filter-btn" data-filter="other" data-i18n="filterOther">✏️ Басқалар</button>
+                    <button class="filter-btn" data-filter="asyk_atu" data-i18n="filterAsyk">🎯 Асық ату</button>
+                    <button class="filter-btn" data-filter="ustel_tennis" data-i18n="filterTennis">🏓 Үстел теннисы</button>
+                    <button class="filter-btn" data-filter="bes_asyk" data-i18n="filterBes">🎲 Бес асық</button>
+                    <button class="filter-btn" data-filter="shakhmат" data-i18n="filterShakh">♟️ Шахмат</button>
+                    <button class="filter-btn" data-filter="togyz" data-i18n="filterTogyz">⚫ Тоғызқұмалақ</button>
                 </div>
                 
                 <div id="participantsList">
@@ -713,7 +731,7 @@
         const CONFIG = {
             qrCodeUrl: 'qr_20260207_004128.png', 
             spreadsheetId: '1kwdeLj2QTAjjpUMUcCxzN--f2Le02s3P2wipIZ6D7lY',
-            webAppUrl: 'https://script.google.com/macros/s/AKfycbzhi4aKTks-UrAGoeKpyt4e-DoDmVgQBAJiiWOHFY60BWRRw6aRhopocjxGVTLsYbQTgA/exec',
+            webAppUrl: 'https://script.google.com/macros/s/AKfycbwK8IwSTgfHXBuz8GFQC3xOnHKelJjErCETUYI4YC91mS_TA2O46dXAlgUtcp3LT-usTg/exec',
             refreshInterval: 5000
         };
 
@@ -820,23 +838,27 @@
             ]
         };
 
+        // Метка "другая школа" по языку
+        const customSchoolLabel = {
+            kk: '✏️ Басқа мектеп (өзін жазу)',
+            ru: '✏️ Другая школа (написать свою)'
+        };
+
         const translations = {
             kk: {
                 regTitle: "Тіркелу",
                 regSubtitle: "Қатысу үшін форманы толтырыңыз",
                 nameLabel: "Сіздің атыңыз",
                 namePlaceholder: "Аты-жөніңізді енгізіңіз",
-                roleLabel: "Лауазымыңыз:",
-                selectRole: "Лауазымды таңдаңыз",
-                roleZavuchVR: "📋 Директордың тәрбие ісі жөніндегі орынбасары",
-                roleParent: "👨‍👩‍👦 Ата-ана",
-                roleCustom: "✏️ Басқа (өзін жазу)",
-                labelCustomRole: "Өз лауазымыңызды жазыңыз:",
-                customRolePlaceholder: "Мысалы: Психолог, Мұғалім...",
+                disciplineLabel: "Пән (дисциплина):",
+                selectDiscipline: "Пәнді таңдаңыз",
                 schoolLabel: "Мектебіңіз:",
+                schoolOptional: "(міндетті емес)",
                 schoolPlaceholder: "Тізімнен мектепті таңдаңыз...",
                 searchPlaceholder: "Мектепті іздеу...",
                 noResults: "Мектеп табылмады",
+                labelCustomSchool: "Мектептің атауын жазыңыз:",
+                customSchoolPlaceholder: "Мектептің толық атауы...",
                 submitBtn: "Тіркелу",
                 submitting: "Тіркелу...",
                 successMsg: "✅ Сіз сәтті тіркелдіңіз!",
@@ -847,9 +869,11 @@
                 participantsTitle: "Тіркелген қатысушылар",
                 total: "Барлығы",
                 filterAll: "Барлығы",
-                filterZavuchVR: "📋 Тәрбие ісі жөніндегі орынбасарлар",
-                filterParent: "👨‍👩‍👦 Ата-аналар",
-                filterOther: "✏️ Басқалар",
+                filterAsyk: "🎯 Асық ату",
+                filterTennis: "🏓 Үстел теннисы",
+                filterBes: "🎲 Бес асық",
+                filterShakh: "♟️ Шахмат",
+                filterTogyz: "⚫ Тоғызқұмалақ",
                 loading: "Қатысушылар жүктелуде...",
                 empty: "Әзірге ешкім тіркелмеді",
                 setupNeeded: "Google Sheets интеграциясын баптаңыз",
@@ -859,25 +883,23 @@
                 backBtn: "← Артқа",
                 newParticipant: "✨ Жаңа қатысушы!",
                 alertName: "Өтінеміз, атыңызды енгізіңіз",
-                alertRole: "Өтінеміз, лауазымыңызды таңдаңыз",
-                alertSchool: "Өтінеміз, мектебіңізді таңдаңыз"
+                alertDiscipline: "Өтінеміз, пәніңізді таңдаңыз",
+                alertCustomSchool: "Өтінеміз, мектептің атауын жазыңыз"
             },
             ru: {
                 regTitle: "Регистрация",
                 regSubtitle: "Заполните форму для участия",
                 nameLabel: "Ваше имя",
                 namePlaceholder: "Введите ваше имя",
-                roleLabel: "Ваша должность:",
-                selectRole: "Выберите должность",
-                roleZavuchVR: "📋 Заместитель директора по ВР",
-                roleParent: "👨‍👩‍👦 Родитель",
-                roleCustom: "✏️ Другое (написать свою)",
-                labelCustomRole: "Напишите свою должность:",
-                customRolePlaceholder: "Например: Психолог, Учитель...",
+                disciplineLabel: "Дисциплина:",
+                selectDiscipline: "Выберите дисциплину",
                 schoolLabel: "Ваша школа:",
+                schoolOptional: "(необязательно)",
                 schoolPlaceholder: "Выберите школу из списка...",
                 searchPlaceholder: "Поиск школы...",
                 noResults: "Школа не найдена",
+                labelCustomSchool: "Напишите название школы:",
+                customSchoolPlaceholder: "Полное название школы...",
                 submitBtn: "Зарегистрироваться",
                 submitting: "Регистрация...",
                 successMsg: "✅ Вы успешно зарегистрированы!",
@@ -888,9 +910,11 @@
                 participantsTitle: "Зарегистрированные участники",
                 total: "Всего",
                 filterAll: "Все",
-                filterZavuchVR: "📋 Зам. директора по ВР",
-                filterParent: "👨‍👩‍👦 Родители",
-                filterOther: "✏️ Другие",
+                filterAsyk: "🎯 Асық ату",
+                filterTennis: "🏓 Үстел теннисы",
+                filterBes: "🎲 Бес асық",
+                filterShakh: "♟️ Шахмат",
+                filterTogyz: "⚫ Тоғызқұмалақ",
                 loading: "Загрузка участников...",
                 empty: "Пока никто не зарегистрировался",
                 setupNeeded: "Настройте интеграцию с Google Sheets",
@@ -900,9 +924,27 @@
                 backBtn: "← Назад",
                 newParticipant: "✨ Новый участник!",
                 alertName: "Пожалуйста, введите ваше имя",
-                alertRole: "Пожалуйста, выберите вашу должность",
-                alertSchool: "Пожалуйста, выберите вашу школу"
+                alertDiscipline: "Пожалуйста, выберите дисциплину",
+                alertCustomSchool: "Пожалуйста, напишите название школы"
             }
+        };
+
+        // Иконки дисциплин для карточек участников
+        const disciplineIcons = {
+            'asyk_atu':    '🎯',
+            'ustel_tennis':'🏓',
+            'bes_asyk':    '🎲',
+            'shakhmат':    '♟️',
+            'togyz':       '⚫'
+        };
+
+        // Отображаемые названия дисциплин
+        const disciplineNames = {
+            'asyk_atu':    'Асық ату',
+            'ustel_tennis':'Үстел теннисы',
+            'bes_asyk':    'Бес асық',
+            'shakhmат':    'Шахмат',
+            'togyz':       'Тоғызқұмалақ'
         };
 
         let currentLang = 'kk'; 
@@ -923,7 +965,7 @@
 
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (translations[lang][key]) {
+                if (translations[lang][key] !== undefined) {
                     el.innerHTML = translations[lang][key]; 
                 }
             });
@@ -946,27 +988,11 @@
             document.getElementById('qrCode').innerHTML = `<img src="${CONFIG.qrCodeUrl}" alt="QR Code">`;
         }
 
-        let selectedRole = null;
         let currentFilter = 'all';
         let lastParticipantsCount = 0;
-        let participantsData =[];
+        let participantsData = [];
         let shownParticipants = new Set(); 
-
-        const roleSelect = document.getElementById('roleSelect');
-        const customRoleGroup = document.getElementById('customRoleGroup');
-        const customRoleInput = document.getElementById('customRole');
-        
-        roleSelect.addEventListener('change', function() {
-            selectedRole = this.value;
-            if (this.value === 'custom') {
-                customRoleGroup.style.display = 'block';
-                customRoleInput.required = true;
-            } else {
-                customRoleGroup.style.display = 'none';
-                customRoleInput.required = false;
-                customRoleInput.value = '';
-            }
-        });
+        let isCustomSchool = false;
 
         // ========================================
         // ЛОГИКА КАСТОМНОГО ВЫПАДАЮЩЕГО СПИСКА ШКОЛ
@@ -978,6 +1004,8 @@
         const schoolsOptionsContainer = document.getElementById('schoolsOptionsContainer');
         const hiddenSchoolInput = document.getElementById('school');
         const noSchoolResults = document.getElementById('noSchoolResults');
+        const customSchoolGroup = document.getElementById('customSchoolGroup');
+        const customSchoolInput = document.getElementById('customSchool');
 
         schoolTrigger.addEventListener('click', () => {
             schoolSelect.classList.toggle('open');
@@ -1012,15 +1040,27 @@
                 }
             });
 
-            if (hasVisible) {
-                noSchoolResults.style.display = 'none';
-            } else {
-                noSchoolResults.style.display = 'block';
-            }
+            noSchoolResults.style.display = hasVisible ? 'none' : 'block';
         }
 
         function renderSchoolDropdown() {
             schoolsOptionsContainer.innerHTML = '';
+
+            // Опция "другая школа" — ПЕРВОЙ в списке
+            const customDiv = document.createElement('div');
+            customDiv.className = 'custom-option custom-school-option';
+            customDiv.textContent = customSchoolLabel[currentLang];
+            customDiv.addEventListener('click', () => {
+                schoolSelectedText.textContent = customSchoolLabel[currentLang];
+                schoolSelectedText.style.color = '#667eea';
+                hiddenSchoolInput.value = '__custom__';
+                isCustomSchool = true;
+                customSchoolGroup.style.display = 'block';
+                schoolSelect.classList.remove('open');
+            });
+            schoolsOptionsContainer.appendChild(customDiv);
+
+            // Затем список школ
             schoolsData[currentLang].forEach((schoolName) => {
                 const div = document.createElement('div');
                 div.className = 'custom-option';
@@ -1029,17 +1069,22 @@
                     schoolSelectedText.textContent = schoolName;
                     schoolSelectedText.style.color = '#333';
                     hiddenSchoolInput.value = schoolName;
+                    isCustomSchool = false;
+                    customSchoolGroup.style.display = 'none';
+                    customSchoolInput.value = '';
                     schoolSelect.classList.remove('open');
                 });
                 schoolsOptionsContainer.appendChild(div);
             });
 
             hiddenSchoolInput.value = '';
+            isCustomSchool = false;
+            customSchoolGroup.style.display = 'none';
+            customSchoolInput.value = '';
             schoolSelectedText.textContent = translations[currentLang].schoolPlaceholder;
             schoolSelectedText.style.color = '#666';
             schoolSearchInput.placeholder = translations[currentLang].searchPlaceholder;
         }
-
 
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', function() {
@@ -1050,28 +1095,35 @@
             });
         });
 
-        // Отправка формы
+        // ========================================
+        // ОТПРАВКА ФОРМЫ
+        // ========================================
         document.getElementById('regForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const name = document.getElementById('name').value.trim();
-            const school = hiddenSchoolInput.value.trim(); 
-            
+            const disciplineValue = document.getElementById('disciplineSelect').value;
+
             if (!name) {
                 alert(translations[currentLang].alertName);
                 return;
             }
-            if (!selectedRole) {
-                alert(translations[currentLang].alertRole);
+            if (!disciplineValue) {
+                alert(translations[currentLang].alertDiscipline);
                 return;
             }
-            if (selectedRole === 'custom' && !customRoleInput.value.trim()) {
-                alert(translations[currentLang].alertRole);
-                return;
-            }
-            if (!school) {
-                alert(translations[currentLang].alertSchool);
-                return;
+
+            // Школа — опциональна, но если выбрана "другая", поле ввода обязательно
+            let schoolToSave = '';
+            if (isCustomSchool) {
+                const customVal = customSchoolInput.value.trim();
+                if (!customVal) {
+                    alert(translations[currentLang].alertCustomSchool);
+                    return;
+                }
+                schoolToSave = customVal;
+            } else {
+                schoolToSave = hiddenSchoolInput.value.trim();
             }
 
             if (CONFIG.webAppUrl.includes('YOUR_WEB_APP_URL')) {
@@ -1084,16 +1136,7 @@
             submitBtn.disabled = true;
             submitBtn.textContent = translations[currentLang].submitting;
 
-            let roleToSave;
-            if (selectedRole === 'custom') {
-                roleToSave = customRoleInput.value.trim();
-            } else {
-                const roleKeyMap = {
-                    'zavuch_vr': 'roleZavuchVR',
-                    'parent': 'roleParent'
-                };
-                roleToSave = translations[currentLang][roleKeyMap[selectedRole]];
-            }
+            const disciplineToSave = disciplineNames[disciplineValue] || disciplineValue;
 
             try {
                 await fetch(CONFIG.webAppUrl, {
@@ -1103,22 +1146,23 @@
                     body: JSON.stringify({
                         action: 'addRegistration',
                         name: name,
-                        role: roleToSave, 
-                        school: school,
+                        school: schoolToSave,
+                        discipline: disciplineToSave,
                         timestamp: new Date().toLocaleString('ru-RU')
                     })
                 });
 
                 document.getElementById('successMessage').classList.add('show');
                 
+                // Сброс формы
                 document.getElementById('name').value = '';
+                document.getElementById('disciplineSelect').value = '';
                 hiddenSchoolInput.value = '';
+                isCustomSchool = false;
+                customSchoolGroup.style.display = 'none';
+                customSchoolInput.value = '';
                 schoolSelectedText.textContent = translations[currentLang].schoolPlaceholder;
                 schoolSelectedText.style.color = '#666';
-                selectedRole = null;
-                roleSelect.value = '';
-                customRoleInput.value = '';
-                customRoleGroup.style.display = 'none';
                 
                 setTimeout(() => loadParticipants(), 1000);
                 setTimeout(() => document.getElementById('successMessage').classList.remove('show'), 3000);
@@ -1133,13 +1177,16 @@
             submitBtn.textContent = translations[currentLang].submitBtn;
         });
 
-        // Умный поиск для фильтра
-        function normalizeRole(roleString) {
-            if (!roleString) return 'other';
-            const s = roleString.toLowerCase();
-            if (s.includes('тәрбие') || s.includes('заместитель') || s.includes('зам')) return 'zavuch_vr';
-            if (s.includes('родитель') || s.includes('ата-ана')) return 'parent';
-            return 'other'; 
+        // Нормализация дисциплины для фильтрации
+        function normalizeDiscipline(disciplineString) {
+            if (!disciplineString) return 'other';
+            const s = disciplineString.toLowerCase();
+            if (s.includes('асық ату') || s.includes('asyk')) return 'asyk_atu';
+            if (s.includes('теннис')) return 'ustel_tennis';
+            if (s.includes('бес асық') || s.includes('bes')) return 'bes_asyk';
+            if (s.includes('шахмат') || s.includes('shakh')) return 'shakhmат';
+            if (s.includes('тоғыз') || s.includes('togyz')) return 'togyz';
+            return 'other';
         }
 
         async function loadParticipants() {
@@ -1148,7 +1195,7 @@
             try {
                 const response = await fetch(`${CONFIG.webAppUrl}?action=getRegistrations`);
                 const data = await response.json();
-                const registrations = data.registrations ||[];
+                const registrations = data.registrations || [];
 
                 if (registrations.length > lastParticipantsCount && lastParticipantsCount > 0) {
                     showRefreshIndicator();
@@ -1170,7 +1217,8 @@
             
             let filtered = participantsData;
             if (currentFilter !== 'all') {
-                filtered = participantsData.filter(r => normalizeRole(r[1]) === currentFilter);
+                // Колонки: [0]=имя, [1]=школа, [2]=дисциплина, [3]=время
+                filtered = participantsData.filter(r => normalizeDiscipline(r[2]) === currentFilter);
             }
 
             if (filtered.length === 0) {
@@ -1179,17 +1227,14 @@
             }
 
             listContainer.innerHTML = filtered
-                .reverse()
-                .map((reg, index) => {
-                    let name = reg[0];
-                    let role = reg[1];
-                    let school = reg[2] || '—';
-                    let timestamp = reg[3] || reg[2];
+                .slice().reverse()
+                .map((reg) => {
+                    // Структура строки: [имя, школа, дисциплина, время]
+                    let name = reg[0] || '';
+                    let school = reg[1] || '—';
+                    let discipline = reg[2] || '—';
+                    let timestamp = reg[3] || '';
 
-                    if (reg.length <= 3 && timestamp === school) {
-                        school = '—';
-                    }
-                    
                     const participantId = `${name}-${timestamp}`;
                     const isNew = !shownParticipants.has(participantId);
                     
@@ -1197,25 +1242,20 @@
                         shownParticipants.add(participantId);
                         setTimeout(() => {
                             const element = document.querySelector(`[data-participant-id="${participantId}"]`);
-                            if (element) {
-                                element.classList.remove('new');
-                            }
+                            if (element) element.classList.remove('new');
                         }, 3000);
                     }
-                    
-                    const nRole = normalizeRole(role);
-                    let roleIcon = '👤';
-                    if (nRole === 'zavuch_vr') roleIcon = '📋';
-                    if (nRole === 'parent') roleIcon = '👨‍👩‍👦';
-                    if (nRole === 'other') roleIcon = '✏️';
+
+                    const nDisc = normalizeDiscipline(discipline);
+                    const icon = disciplineIcons[nDisc] || '🎽';
 
                     return `
                         <div class="participant-item ${isNew ? 'new' : ''}" data-participant-id="${participantId}">
-                            <div class="participant-avatar">${roleIcon}</div>
+                            <div class="participant-avatar">${icon}</div>
                             <div class="participant-info">
                                 <div class="participant-name">${name}</div>
                                 <div class="participant-school">🏫 ${school}</div>
-                                <div class="participant-role">${role}</div>
+                                <div class="participant-discipline">${discipline}</div>
                                 <div class="participant-time">${timestamp}</div>
                             </div>
                         </div>
