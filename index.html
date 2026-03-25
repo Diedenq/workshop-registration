@@ -213,7 +213,7 @@
         h1 { color: #333; font-size: 28px; margin-bottom: 10px; }
         .subtitle { color: #666; font-size: 16px; }
 
-        .form-group { margin-bottom: 25px; }
+        .form-group { margin-bottom: 25px; transition: all 0.3s; }
 
         label {
             display: block;
@@ -616,8 +616,17 @@
                     <input type="text" id="name" data-i18n-placeholder="namePlaceholder" placeholder="Аты-жөніңізді енгізіңіз" required>
                 </div>
 
-                <!-- Дисциплина -->
+                <!-- Роль (Участник / Гость) -->
                 <div class="form-group">
+                    <label data-i18n="roleLabel">Рөліңіз:</label>
+                    <select id="roleSelect" class="role-select">
+                        <option value="participant" data-i18n="roleParticipant" selected>Қатысушы</option>
+                        <option value="guest" data-i18n="roleGuest">Қонақ (Қатыспаймын)</option>
+                    </select>
+                </div>
+
+                <!-- Дисциплина (скрывается для Гостей) -->
+                <div class="form-group" id="disciplineGroup">
                     <label data-i18n="disciplineLabel">Пән (дисциплина):</label>
                     <select id="disciplineSelect" class="role-select">
                         <option value="" data-i18n="selectDiscipline" selected>Пәнді таңдаңыз</option>
@@ -629,8 +638,8 @@
                     </select>
                 </div>
 
-                <!-- Школа (опциональная, с возможностью написать свою) -->
-                <div class="form-group custom-select-wrapper">
+                <!-- Школа (опциональная, скрывается для Гостей) -->
+                <div class="form-group custom-select-wrapper" id="schoolGroup">
                     <label data-i18n="schoolLabel">Мектебіңіз: <span style="color:#999; font-weight:400;" data-i18n="schoolOptional">(міндетті емес)</span></label>
                     <div class="custom-select" id="schoolSelect">
                         <div class="custom-select-trigger" id="schoolTrigger">
@@ -701,6 +710,7 @@
                     <button class="filter-btn" data-filter="bes_asyk" data-i18n="filterBes">🎲 Бес асық</button>
                     <button class="filter-btn" data-filter="shakhmат" data-i18n="filterShakh">♟️ Шахмат</button>
                     <button class="filter-btn" data-filter="togyz" data-i18n="filterTogyz">⚫ Тоғызқұмалақ</button>
+                    <button class="filter-btn" data-filter="guest" data-i18n="filterGuest">👁️ Қонақтар</button>
                 </div>
                 
                 <div id="participantsList">
@@ -850,6 +860,10 @@
                 regSubtitle: "Қатысу үшін форманы толтырыңыз",
                 nameLabel: "Сіздің атыңыз",
                 namePlaceholder: "Аты-жөніңізді енгізіңіз",
+                roleLabel: "Рөліңіз:",
+                roleParticipant: "Қатысушы",
+                roleGuest: "Қонақ (Қатыспаймын)",
+                guestDiscipline: "Қонақ",
                 disciplineLabel: "Пән (дисциплина):",
                 selectDiscipline: "Пәнді таңдаңыз",
                 schoolLabel: "Мектебіңіз:",
@@ -874,6 +888,7 @@
                 filterBes: "🎲 Бес асық",
                 filterShakh: "♟️ Шахмат",
                 filterTogyz: "⚫ Тоғызқұмалақ",
+                filterGuest: "👁️ Қонақтар",
                 loading: "Қатысушылар жүктелуде...",
                 empty: "Әзірге ешкім тіркелмеді",
                 setupNeeded: "Google Sheets интеграциясын баптаңыз",
@@ -891,6 +906,10 @@
                 regSubtitle: "Заполните форму для участия",
                 nameLabel: "Ваше имя",
                 namePlaceholder: "Введите ваше имя",
+                roleLabel: "Ваша роль:",
+                roleParticipant: "Участник",
+                roleGuest: "Гость (Не участвую)",
+                guestDiscipline: "Гость",
                 disciplineLabel: "Дисциплина:",
                 selectDiscipline: "Выберите дисциплину",
                 schoolLabel: "Ваша школа:",
@@ -915,6 +934,7 @@
                 filterBes: "🎲 Бес асық",
                 filterShakh: "♟️ Шахмат",
                 filterTogyz: "⚫ Тоғызқұмалақ",
+                filterGuest: "👁️ Гости",
                 loading: "Загрузка участников...",
                 empty: "Пока никто не зарегистрировался",
                 setupNeeded: "Настройте интеграцию с Google Sheets",
@@ -935,7 +955,8 @@
             'ustel_tennis':'🏓',
             'bes_asyk':    '🎲',
             'shakhmат':    '♟️',
-            'togyz':       '⚫'
+            'togyz':       '⚫',
+            'guest':       '👁️'
         };
 
         // Отображаемые названия дисциплин
@@ -990,7 +1011,7 @@
 
         let currentFilter = 'all';
         let lastParticipantsCount = 0;
-        let participantsData = [];
+        let participantsData =[];
         let shownParticipants = new Set(); 
         let isCustomSchool = false;
 
@@ -1096,34 +1117,67 @@
         });
 
         // ========================================
+        // ЛОГИКА ПЕРЕКЛЮЧЕНИЯ РОЛЕЙ (Участник / Гость)
+        // ========================================
+        document.getElementById('roleSelect').addEventListener('change', function() {
+            const isGuest = this.value === 'guest';
+            
+            // Если гость, скрываем поля дисциплины и школы
+            if (isGuest) {
+                document.getElementById('disciplineGroup').style.display = 'none';
+                document.getElementById('schoolGroup').style.display = 'none';
+                document.getElementById('customSchoolGroup').style.display = 'none';
+            } else {
+                document.getElementById('disciplineGroup').style.display = 'block';
+                document.getElementById('schoolGroup').style.display = 'block';
+                if (isCustomSchool) {
+                    document.getElementById('customSchoolGroup').style.display = 'block';
+                }
+            }
+        });
+
+        // ========================================
         // ОТПРАВКА ФОРМЫ
         // ========================================
         document.getElementById('regForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const name = document.getElementById('name').value.trim();
-            const disciplineValue = document.getElementById('disciplineSelect').value;
+            const role = document.getElementById('roleSelect').value;
+            const isGuest = (role === 'guest');
 
             if (!name) {
                 alert(translations[currentLang].alertName);
                 return;
             }
-            if (!disciplineValue) {
-                alert(translations[currentLang].alertDiscipline);
-                return;
-            }
 
-            // Школа — опциональна, но если выбрана "другая", поле ввода обязательно
+            let disciplineToSave = '';
             let schoolToSave = '';
-            if (isCustomSchool) {
-                const customVal = customSchoolInput.value.trim();
-                if (!customVal) {
-                    alert(translations[currentLang].alertCustomSchool);
+
+            if (isGuest) {
+                // Если гость, прописываем дефолтные значения
+                disciplineToSave = translations[currentLang].guestDiscipline;
+                schoolToSave = '-'; 
+            } else {
+                // Если участник, проверяем дисциплину и школу
+                const disciplineValue = document.getElementById('disciplineSelect').value;
+                if (!disciplineValue) {
+                    alert(translations[currentLang].alertDiscipline);
                     return;
                 }
-                schoolToSave = customVal;
-            } else {
-                schoolToSave = hiddenSchoolInput.value.trim();
+                disciplineToSave = disciplineNames[disciplineValue] || disciplineValue;
+
+                if (isCustomSchool) {
+                    const customVal = customSchoolInput.value.trim();
+                    if (!customVal) {
+                        alert(translations[currentLang].alertCustomSchool);
+                        return;
+                    }
+                    schoolToSave = customVal;
+                } else {
+                    // Если школа не выбрана из списка, просто отправим пустоту или тире
+                    schoolToSave = hiddenSchoolInput.value.trim() || '-';
+                }
             }
 
             if (CONFIG.webAppUrl.includes('YOUR_WEB_APP_URL')) {
@@ -1135,8 +1189,6 @@
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.textContent = translations[currentLang].submitting;
-
-            const disciplineToSave = disciplineNames[disciplineValue] || disciplineValue;
 
             try {
                 await fetch(CONFIG.webAppUrl, {
@@ -1156,7 +1208,11 @@
                 
                 // Сброс формы
                 document.getElementById('name').value = '';
+                document.getElementById('roleSelect').value = 'participant';
                 document.getElementById('disciplineSelect').value = '';
+                document.getElementById('disciplineGroup').style.display = 'block';
+                document.getElementById('schoolGroup').style.display = 'block';
+
                 hiddenSchoolInput.value = '';
                 isCustomSchool = false;
                 customSchoolGroup.style.display = 'none';
@@ -1177,7 +1233,7 @@
             submitBtn.textContent = translations[currentLang].submitBtn;
         });
 
-        // Нормализация дисциплины для фильтрации
+        // Нормализация дисциплины для фильтрации и иконок
         function normalizeDiscipline(disciplineString) {
             if (!disciplineString) return 'other';
             const s = disciplineString.toLowerCase();
@@ -1186,6 +1242,7 @@
             if (s.includes('бес асық') || s.includes('bes')) return 'bes_asyk';
             if (s.includes('шахмат') || s.includes('shakh')) return 'shakhmат';
             if (s.includes('тоғыз') || s.includes('togyz')) return 'togyz';
+            if (s.includes('гость') || s.includes('қонақ') || s.includes('guest')) return 'guest';
             return 'other';
         }
 
@@ -1195,7 +1252,7 @@
             try {
                 const response = await fetch(`${CONFIG.webAppUrl}?action=getRegistrations`);
                 const data = await response.json();
-                const registrations = data.registrations || [];
+                const registrations = data.registrations ||[];
 
                 if (registrations.length > lastParticipantsCount && lastParticipantsCount > 0) {
                     showRefreshIndicator();
@@ -1229,7 +1286,7 @@
             listContainer.innerHTML = filtered
                 .slice().reverse()
                 .map((reg) => {
-                    // Структура строки: [имя, школа, дисциплина, время]
+                    // Структура строки:[имя, школа, дисциплина, время]
                     let name = reg[0] || '';
                     let school = reg[1] || '—';
                     let discipline = reg[2] || '—';
@@ -1249,12 +1306,15 @@
                     const nDisc = normalizeDiscipline(discipline);
                     const icon = disciplineIcons[nDisc] || '🎽';
 
+                    // Если гость, скрываем строчку со школой для красоты
+                    const schoolDisplay = (school === '-' || school === '') ? '' : `<div class="participant-school">🏫 ${school}</div>`;
+
                     return `
                         <div class="participant-item ${isNew ? 'new' : ''}" data-participant-id="${participantId}">
                             <div class="participant-avatar">${icon}</div>
                             <div class="participant-info">
                                 <div class="participant-name">${name}</div>
-                                <div class="participant-school">🏫 ${school}</div>
+                                ${schoolDisplay}
                                 <div class="participant-discipline">${discipline}</div>
                                 <div class="participant-time">${timestamp}</div>
                             </div>
