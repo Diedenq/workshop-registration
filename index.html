@@ -641,6 +641,12 @@
                     <input type="hidden" id="school">
                 </div>
 
+                <!-- НОВОЕ: Поле для ввода своей школы (скрыто по умолчанию) -->
+                <div class="form-group" id="customSchoolGroup" style="display: none;">
+                    <label data-i18n="labelCustomSchool">Өз мектебіңізді жазыңыз:</label>
+                    <input type="text" id="customSchool" data-i18n-placeholder="customSchoolPlaceholder" placeholder="Мектеп атауын енгізіңіз">
+                </div>
+
                 <button type="submit" class="submit-btn" id="submitBtn" data-i18n="submitBtn">Тіркелу</button>
             </form>
 
@@ -838,6 +844,9 @@
                 customRolePlaceholder: "Мысалы: Психолог, Мұғалім...",
                 schoolLabel: "Мектебіңіз:",
                 schoolPlaceholder: "Тізімнен мектепті таңдаңыз...",
+                schoolCustom: "✏️ Басқа (өзін жазу)",
+                labelCustomSchool: "Өз мектебіңізді жазыңыз:",
+                customSchoolPlaceholder: "Мектеп атауын енгізіңіз",
                 searchPlaceholder: "Мектепті іздеу...",
                 noResults: "Мектеп табылмады",
                 submitBtn: "Тіркелу",
@@ -864,7 +873,8 @@
                 newParticipant: "✨ Жаңа қатысушы!",
                 alertName: "Өтінеміз, атыңызды енгізіңіз",
                 alertRole: "Өтінеміз, лауазымыңызды таңдаңыз",
-                alertSchool: "Өтінеміз, мектебіңізді таңдаңыз"
+                alertSchool: "Өтінеміз, мектебіңізді таңдаңыз",
+                alertCustomSchool: "Өтінеміз, мектебіңіздің атауын жазыңыз"
             },
             ru: {
                 regTitle: "Регистрация",
@@ -881,6 +891,9 @@
                 customRolePlaceholder: "Например: Психолог, Учитель...",
                 schoolLabel: "Ваша школа:",
                 schoolPlaceholder: "Выберите школу из списка...",
+                schoolCustom: "✏️ Другое (написать свою)",
+                labelCustomSchool: "Напишите свою школу:",
+                customSchoolPlaceholder: "Введите название школы",
                 searchPlaceholder: "Поиск школы...",
                 noResults: "Школа не найдена",
                 submitBtn: "Зарегистрироваться",
@@ -907,11 +920,13 @@
                 newParticipant: "✨ Новый участник!",
                 alertName: "Пожалуйста, введите ваше имя",
                 alertRole: "Пожалуйста, выберите вашу должность",
-                alertSchool: "Пожалуйста, выберите вашу школу"
+                alertSchool: "Пожалуйста, выберите вашу школу",
+                alertCustomSchool: "Пожалуйста, напишите название вашей школы"
             }
         };
 
         let currentLang = 'kk'; 
+        let isCustomSchoolSelected = false; // Отслеживает, выбрал ли человек пункт "Написать свою школу"
 
         function confirmLanguage(lang) {
             setLanguage(lang);
@@ -984,6 +999,8 @@
         const schoolsOptionsContainer = document.getElementById('schoolsOptionsContainer');
         const hiddenSchoolInput = document.getElementById('school');
         const noSchoolResults = document.getElementById('noSchoolResults');
+        const customSchoolGroup = document.getElementById('customSchoolGroup');
+        const customSchoolInput = document.getElementById('customSchool');
 
         schoolTrigger.addEventListener('click', () => {
             schoolSelect.classList.toggle('open');
@@ -1010,7 +1027,11 @@
             let hasVisible = false;
 
             options.forEach(opt => {
-                if (opt.textContent.toLowerCase().includes(query)) {
+                // Всегда оставлять видимым пункт "Другое (написать свою)"
+                if (opt.dataset.type === 'custom') {
+                    opt.classList.remove('hidden');
+                    hasVisible = true;
+                } else if (opt.textContent.toLowerCase().includes(query)) {
                     opt.classList.remove('hidden');
                     hasVisible = true;
                 } else {
@@ -1027,6 +1048,23 @@
 
         function renderSchoolDropdown() {
             schoolsOptionsContainer.innerHTML = '';
+            
+            // 1. Добавляем опцию "Написать свою школу" в самый верх
+            const customDiv = document.createElement('div');
+            customDiv.className = 'custom-option';
+            customDiv.dataset.type = 'custom'; // Спец. метка для фильтра
+            customDiv.innerHTML = `<strong>${translations[currentLang].schoolCustom}</strong>`;
+            customDiv.addEventListener('click', () => {
+                schoolSelectedText.textContent = translations[currentLang].schoolCustom;
+                schoolSelectedText.style.color = '#333';
+                hiddenSchoolInput.value = 'custom';
+                isCustomSchoolSelected = true;
+                customSchoolGroup.style.display = 'block';
+                schoolSelect.classList.remove('open');
+            });
+            schoolsOptionsContainer.appendChild(customDiv);
+
+            // 2. Добавляем остальные школы из списка
             schoolsData[currentLang].forEach((schoolName) => {
                 const div = document.createElement('div');
                 div.className = 'custom-option';
@@ -1035,12 +1073,19 @@
                     schoolSelectedText.textContent = schoolName;
                     schoolSelectedText.style.color = '#333';
                     hiddenSchoolInput.value = schoolName;
+                    isCustomSchoolSelected = false;
+                    customSchoolGroup.style.display = 'none';
+                    customSchoolInput.value = ''; // очищаем поле, если оно было заполнено
                     schoolSelect.classList.remove('open');
                 });
                 schoolsOptionsContainer.appendChild(div);
             });
 
+            // Сброс при смене языка
             hiddenSchoolInput.value = '';
+            isCustomSchoolSelected = false;
+            customSchoolGroup.style.display = 'none';
+            customSchoolInput.value = '';
             schoolSelectedText.textContent = translations[currentLang].schoolPlaceholder;
             schoolSelectedText.style.color = '#666';
             schoolSearchInput.placeholder = translations[currentLang].searchPlaceholder;
@@ -1061,7 +1106,7 @@
             e.preventDefault();
             
             const name = document.getElementById('name').value.trim();
-            const school = hiddenSchoolInput.value.trim(); 
+            let finalSchool = hiddenSchoolInput.value.trim(); 
             
             if (!name) {
                 alert(translations[currentLang].alertName);
@@ -1075,9 +1120,18 @@
                 alert(translations[currentLang].alertRole);
                 return;
             }
-            if (!school) {
+            if (!finalSchool) {
                 alert(translations[currentLang].alertSchool);
                 return;
+            }
+
+            // Если выбрана "Своя школа", берем значение из текстового поля
+            if (isCustomSchoolSelected) {
+                finalSchool = customSchoolInput.value.trim();
+                if (!finalSchool) {
+                    alert(translations[currentLang].alertCustomSchool);
+                    return;
+                }
             }
 
             if (CONFIG.webAppUrl.includes('YOUR_WEB_APP_URL')) {
@@ -1111,13 +1165,14 @@
                         action: 'addRegistration',
                         name: name,
                         role: roleToSave, 
-                        school: school,
+                        school: finalSchool, // отправляем финальное название школы
                         timestamp: new Date().toLocaleString('ru-RU')
                     })
                 });
 
                 document.getElementById('successMessage').classList.add('show');
                 
+                // Очистка формы после успеха
                 document.getElementById('name').value = '';
                 hiddenSchoolInput.value = '';
                 schoolSelectedText.textContent = translations[currentLang].schoolPlaceholder;
@@ -1126,6 +1181,11 @@
                 roleSelect.value = '';
                 customRoleInput.value = '';
                 customRoleGroup.style.display = 'none';
+                
+                // Сброс кастомной школы
+                isCustomSchoolSelected = false;
+                customSchoolGroup.style.display = 'none';
+                customSchoolInput.value = '';
                 
                 setTimeout(() => loadParticipants(), 1000);
                 setTimeout(() => document.getElementById('successMessage').classList.remove('show'), 3000);
