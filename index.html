@@ -529,6 +529,7 @@
         .participant-name { font-weight: 600; color: #333; font-size: 16px; margin-bottom: 3px; }
         .participant-school { font-size: 13px; color: #667eea; font-weight: 600; margin-bottom: 2px; }
         .participant-role { font-size: 14px; color: #666; }
+        .participant-direction { font-size: 13px; color: #764ba2; font-weight: 600; margin-top: 2px; }
         .participant-time { font-size: 12px; color: #999; margin-top: 2px;}
 
         .loading, .empty-state { text-align: center; padding: 40px; color: #999; }
@@ -619,6 +620,19 @@
                 <div class="form-group" id="customRoleGroup" style="display: none;">
                     <label data-i18n="labelCustomRole">Өз лауазымыңызды жазыңыз:</label>
                     <input type="text" id="customRole" data-i18n-placeholder="customRolePlaceholder" placeholder="Мысалы: Психолог, Мұғалім...">
+                </div>
+
+                <div class="form-group">
+                    <label data-i18n="directionLabel">Бағытыңыз:</label>
+                    <select id="directionSelect" class="role-select">
+                        <option value="" data-i18n="selectDirection" selected>Бағытты таңдаңыз</option>
+                        <option value="sport" data-i18n="direction1">🏃 Дене шынықтыру және спорт, туризм секциясы</option>
+                        <option value="nvp" data-i18n="direction2">🎖️ Алғашқы әскери дайындық секциясы</option>
+                        <option value="art" data-i18n="direction3">🎨 Қосымша білім беру секциясы: Көркем-эстетикалық бағыт</option>
+                        <option value="music" data-i18n="direction4">🎵 Қосымша білім беру секциясы: Музыка бағыты</option>
+                        <option value="management" data-i18n="direction5">📊 Қосымша білім беру секциясы: Басқару менеджмент бағыты</option>
+                        <option value="tech" data-i18n="direction6">🔬 Қосымша білім беру секциясы: Ғылыми техникалық бағыт</option>
+                    </select>
                 </div>
 
                 <div class="form-group custom-select-wrapper">
@@ -721,7 +735,7 @@
         const CONFIG = {
             qrCodeUrl: 'qr_20260207_004128.png', 
             spreadsheetId: '1kwdeLj2QTAjjpUMUcCxzN--f2Le02s3P2wipIZ6D7lY',
-            webAppUrl: 'https://script.google.com/macros/s/AKfycbzhi4aKTks-UrAGoeKpyt4e-DoDmVgQBAJiiWOHFY60BWRRw6aRhopocjxGVTLsYbQTgA/exec',
+            webAppUrl: 'https://script.google.com/macros/s/AKfycbwZXK5Y05cmui1NGfkHYwF7y3k4JbiOwFDzOBIplMQXDxi6IU2bVp2lgdTryZ-GOCRe-Q/exec',
             refreshInterval: 5000
         };
 
@@ -842,6 +856,14 @@
                 roleCustom: "✏️ Басқа (өзін жазу)",
                 labelCustomRole: "Өз лауазымыңызды жазыңыз:",
                 customRolePlaceholder: "Мысалы: Психолог, Мұғалім...",
+                directionLabel: "Бағытыңыз:",
+                selectDirection: "Бағытты таңдаңыз",
+                direction1: "🏃 Дене шынықтыру және спорт, туризм секциясы",
+                direction2: "🎖️ Алғашқы әскери дайындық секциясы",
+                direction3: "🎨 Қосымша білім беру секциясы: Көркем-эстетикалық бағыт",
+                direction4: "🎵 Қосымша білім беру секциясы: Музыка бағыты",
+                direction5: "📊 Қосымша білім беру секциясы: Басқару менеджмент бағыты",
+                direction6: "🔬 Қосымша білім беру секциясы: Ғылыми техникалық бағыт",
                 schoolLabel: "Мектебіңіз:",
                 schoolPlaceholder: "Тізімнен мектепті таңдаңыз...",
                 schoolCustom: "✏️ Басқа (өзін жазу)",
@@ -874,7 +896,8 @@
                 alertName: "Өтінеміз, атыңызды енгізіңіз",
                 alertRole: "Өтінеміз, лауазымыңызды таңдаңыз",
                 alertSchool: "Өтінеміз, мектебіңізді таңдаңыз",
-                alertCustomSchool: "Өтінеміз, мектебіңіздің атауын жазыңыз"
+                alertCustomSchool: "Өтінеміз, мектебіңіздің атауын жазыңыз",
+                alertDirection: "Өтінеміз, бағытты таңдаңыз"
             },
             ru: {
                 regTitle: "Регистрация",
@@ -889,6 +912,14 @@
                 roleCustom: "✏️ Другое (написать свою)",
                 labelCustomRole: "Напишите свою должность:",
                 customRolePlaceholder: "Например: Психолог, Учитель...",
+                directionLabel: "Ваше направление:",
+                selectDirection: "Выберите направление",
+                direction1: "🏃 Секция физической культуры и спорта, туризма",
+                direction2: "🎖️ Секция начальной военной подготовки",
+                direction3: "🎨 Секция доп. образования: Художественно-эстетическое направление",
+                direction4: "🎵 Секция доп. образования: Музыкальное направление",
+                direction5: "📊 Секция доп. образования: Направление управленческого менеджмента",
+                direction6: "🔬 Секция доп. образования: Научно-техническое направление",
                 schoolLabel: "Ваша школа:",
                 schoolPlaceholder: "Выберите школу из списка...",
                 schoolCustom: "✏️ Другое (написать свою)",
@@ -921,7 +952,8 @@
                 alertName: "Пожалуйста, введите ваше имя",
                 alertRole: "Пожалуйста, выберите вашу должность",
                 alertSchool: "Пожалуйста, выберите вашу школу",
-                alertCustomSchool: "Пожалуйста, напишите название вашей школы"
+                alertCustomSchool: "Пожалуйста, напишите название вашей школы",
+                alertDirection: "Пожалуйста, выберите направление"
             }
         };
 
@@ -968,6 +1000,7 @@
         }
 
         let selectedRole = null;
+        let selectedDirection = null;
         let currentFilter = 'all';
         let lastParticipantsCount = 0;
         let participantsData =[];
@@ -987,6 +1020,11 @@
                 customRoleInput.required = false;
                 customRoleInput.value = '';
             }
+        });
+
+        const directionSelect = document.getElementById('directionSelect');
+        directionSelect.addEventListener('change', function() {
+            selectedDirection = this.value;
         });
 
         // ========================================
@@ -1120,6 +1158,10 @@
                 alert(translations[currentLang].alertRole);
                 return;
             }
+            if (!selectedDirection) {
+                alert(translations[currentLang].alertDirection);
+                return;
+            }
             if (!finalSchool) {
                 alert(translations[currentLang].alertSchool);
                 return;
@@ -1156,6 +1198,16 @@
                 roleToSave = translations[currentLang][roleKeyMap[selectedRole]];
             }
 
+            const directionKeyMap = {
+                'sport': 'direction1',
+                'nvp': 'direction2',
+                'art': 'direction3',
+                'music': 'direction4',
+                'management': 'direction5',
+                'tech': 'direction6'
+            };
+            const directionToSave = translations[currentLang][directionKeyMap[selectedDirection]];
+
             try {
                 await fetch(CONFIG.webAppUrl, {
                     method: 'POST',
@@ -1166,6 +1218,7 @@
                         name: name,
                         role: roleToSave, 
                         school: finalSchool, // отправляем финальное название школы
+                        direction: directionToSave, // выбранное направление
                         timestamp: new Date().toLocaleString('ru-RU')
                     })
                 });
@@ -1181,6 +1234,8 @@
                 roleSelect.value = '';
                 customRoleInput.value = '';
                 customRoleGroup.style.display = 'none';
+                selectedDirection = null;
+                directionSelect.value = '';
                 
                 // Сброс кастомной школы
                 isCustomSchoolSelected = false;
@@ -1212,6 +1267,20 @@
             if (s.includes('родитель') || s.includes('ата-ана')) return 'parent';
             
             return 'other'; 
+        }
+
+        function normalizeDirection(directionString) {
+            if (!directionString) return 'other';
+            const s = directionString.toLowerCase();
+
+            if (s.includes('спорт') || s.includes('туризм')) return 'sport';
+            if (s.includes('әскери') || s.includes('военн')) return 'nvp';
+            if (s.includes('көркем') || s.includes('художест')) return 'art';
+            if (s.includes('музыка') || s.includes('музык')) return 'music';
+            if (s.includes('менеджмент')) return 'management';
+            if (s.includes('ғылыми') || s.includes('техник') || s.includes('научно')) return 'tech';
+
+            return 'other';
         }
 
         async function loadParticipants() {
@@ -1253,15 +1322,13 @@
             listContainer.innerHTML = filtered
                 .reverse()
                 .map((reg, index) => {
+                    // Порядок колонок в таблице: Аты-тегі, Должность, Мектеп, Уақыты, Бағыт
                     let name = reg[0];
                     let role = reg[1];
                     let school = reg[2] || '—';
-                    let timestamp = reg[3] || reg[2];
+                    let timestamp = reg[3] || '—';
+                    let direction = reg[4] || '—';
 
-                    if (reg.length <= 3 && timestamp === school) {
-                        school = '—';
-                    }
-                    
                     const participantId = `${name}-${timestamp}`;
                     const isNew = !shownParticipants.has(participantId);
                     
@@ -1289,12 +1356,14 @@
                                 <div class="participant-name">${name}</div>
                                 <div class="participant-school">🏫 ${school}</div>
                                 <div class="participant-role">${role}</div>
+                                <div class="participant-direction">${direction}</div>
                                 <div class="participant-time">${timestamp}</div>
                             </div>
                         </div>
                     `;
                 }).join('');
         }
+
 
         function showRefreshIndicator() {
             const indicator = document.getElementById('refreshIndicator');
