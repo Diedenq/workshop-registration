@@ -435,29 +435,6 @@
             overflow-y: auto;
         }
 
-        .list-controls {
-            padding: 20px;
-            border-bottom: 2px solid #f0f0f0;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .filter-btn {
-            padding: 8px 16px;
-            border: 2px solid #e0e0e0;
-            background: white;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .filter-btn:hover { border-color: #667eea; background: #f8f9ff; }
-        .filter-btn.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-color: #667eea; }
-
         .participant-item {
             padding: 15px 20px;
             border-bottom: 1px solid #f0f0f0;
@@ -528,9 +505,112 @@
         .participant-info { flex: 1; }
         .participant-name { font-weight: 600; color: #333; font-size: 16px; margin-bottom: 3px; }
         .participant-school { font-size: 13px; color: #667eea; font-weight: 600; margin-bottom: 2px; }
-        .participant-role { font-size: 14px; color: #666; }
         .participant-direction { font-size: 13px; color: #764ba2; font-weight: 600; margin-top: 2px; }
-        .participant-time { font-size: 12px; color: #999; margin-top: 2px;}
+        .participant-room-tag {
+            display: inline-block;
+            margin-top: 4px;
+            padding: 2px 10px;
+            background: #f0f4ff;
+            color: #667eea;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .participant-time { font-size: 12px; color: #999; margin-top: 4px;}
+
+        /* --- БЛОК "НАПРАВЛЕНИЕ - КАБИНЕТ" --- */
+        .rooms-legend {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 22px 25px;
+            margin-bottom: 30px;
+        }
+        .rooms-legend-title {
+            color: #333;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .rooms-legend-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .rooms-legend-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: #f8f9ff;
+            border-radius: 10px;
+        }
+        .rooms-legend-direction { color: #333; font-weight: 600; font-size: 13px; flex: 1; }
+        .rooms-legend-room {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* --- МОДАЛЬНОЕ ОКНО С НОМЕРОМ КАБИНЕТА --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.show { display: flex; animation: fadeIn 0.25s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 35px 30px;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: modalPop 0.3s ease;
+        }
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal-box h3 { color: #333; font-size: 20px; margin-bottom: 5px; }
+        .modal-direction-label, .modal-room-label {
+            font-size: 12px; color: #999; font-weight: 700; text-transform: uppercase; margin-top: 18px; letter-spacing: 0.5px;
+        }
+        .modal-direction-value { font-size: 16px; color: #333; font-weight: 600; margin-top: 5px; }
+        .modal-room-value {
+            font-size: 34px;
+            color: #667eea;
+            font-weight: 800;
+            margin-top: 5px;
+        }
+        .modal-close-btn {
+            margin-top: 28px;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .modal-close-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4); }
 
         .loading, .empty-state { text-align: center; padding: 40px; color: #999; }
         .empty-state-icon { font-size: 64px; margin-bottom: 20px; opacity: 0.5; }
@@ -607,22 +687,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label data-i18n="roleLabel">Лауазымыңыз:</label>
-                    <select id="roleSelect" class="role-select">
-                        <option value="" data-i18n="selectRole" selected>Лауазымды таңдаңыз</option>
-                        <option value="director" data-i18n="roleDirector">👔 Директор</option>
-                        <option value="zavuch_vr" data-i18n="roleZavuchVR">📋 Директордың тәрбие ісі жөніндегі орынбасары</option>
-                        <option value="parent" data-i18n="roleParent">👨‍👩‍👦 Ата-ана</option>
-                        <option value="custom" data-i18n="roleCustom">✏️ Басқа (өзін жазу)</option>
-                    </select>
-                </div>
-
-                <div class="form-group" id="customRoleGroup" style="display: none;">
-                    <label data-i18n="labelCustomRole">Өз лауазымыңызды жазыңыз:</label>
-                    <input type="text" id="customRole" data-i18n-placeholder="customRolePlaceholder" placeholder="Мысалы: Психолог, Мұғалім...">
-                </div>
-
-                <div class="form-group">
                     <label data-i18n="directionLabel">Бағытыңыз:</label>
                     <select id="directionSelect" class="role-select">
                         <option value="" data-i18n="selectDirection" selected>Бағытты таңдаңыз</option>
@@ -632,6 +696,8 @@
                         <option value="music" data-i18n="direction4">🎵 Қосымша білім беру секциясы: Музыка бағыты</option>
                         <option value="management" data-i18n="direction5">📊 Қосымша білім беру секциясы: Басқару менеджмент бағыты</option>
                         <option value="tech" data-i18n="direction6">🔬 Қосымша білім беру секциясы: Ғылыми техникалық бағыт</option>
+                        <option value="olympiad_math" data-i18n="direction7">🧮 Дарын бағыты: Олимпиадалық резерв (математика)</option>
+                        <option value="olympiad_history" data-i18n="direction8">📜 Дарын бағыты: Олимпиадалық резерв (тарих)</option>
                     </select>
                 </div>
 
@@ -688,6 +754,11 @@
                 </div>
             </div>
 
+            <div class="rooms-legend">
+                <div class="rooms-legend-title" data-i18n="roomsLegendTitle">📍 Бағыттар мен кабинеттер</div>
+                <div class="rooms-legend-list" id="roomsLegendList"></div>
+            </div>
+
             <div class="stats-header">
                 <h2 data-i18n="participantsTitle">Тіркелген қатысушылар</h2>
                 <div class="stats-center">
@@ -699,20 +770,24 @@
             </div>
 
             <div class="participants-list">
-                <div class="list-controls">
-                    <button class="filter-btn active" data-filter="all" data-i18n="filterAll">Барлығы</button>
-                    <button class="filter-btn" data-filter="director" data-i18n="filterDirector">👔 Директорлар</button>
-                    <button class="filter-btn" data-filter="zavuch_vr" data-i18n="filterZavuchVR">📋 Тәрбие ісі жөніндегі орынбасарлар</button>
-                    <button class="filter-btn" data-filter="parent" data-i18n="filterParent">👨‍👩‍👦 Ата-аналар</button>
-                    <button class="filter-btn" data-filter="other" data-i18n="filterOther">✏️ Басқалар</button>
-                </div>
-                
                 <div id="participantsList">
                     <div class="loading" data-i18n="loading">Қатысушылар жүктелуде...</div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="modal-overlay" id="roomModalOverlay">
+        <div class="modal-box">
+            <h3 id="modalSuccessText"></h3>
+            <div class="modal-direction-label" data-i18n="modalDirectionLabel">Бағыт:</div>
+            <div class="modal-direction-value" id="modalDirectionText"></div>
+            <div class="modal-room-label" data-i18n="modalRoomLabel">Кабинет:</div>
+            <div class="modal-room-value" id="modalRoomText"></div>
+            <button class="modal-close-btn" id="modalCloseBtn" data-i18n="modalCloseBtn">Жарайды</button>
+        </div>
+    </div>
+
 
     <div class="container admin-panel" id="adminPanel">
         <div class="header">
@@ -737,6 +812,35 @@
             spreadsheetId: '1kwdeLj2QTAjjpUMUcCxzN--f2Le02s3P2wipIZ6D7lY',
             webAppUrl: 'https://script.google.com/macros/s/AKfycbwZXK5Y05cmui1NGfkHYwF7y3k4JbiOwFDzOBIplMQXDxi6IU2bVp2lgdTryZ-GOCRe-Q/exec',
             refreshInterval: 5000
+        };
+
+        // ========================================
+        // КАБИНЕТЫ (ЗАГЛУШКА)
+        // Когда узнаете реальные номера кабинетов — просто замените
+        // значения справа на настоящие, порядок ключей менять не нужно.
+        // ========================================
+        const ROOM_MAP = {
+            sport: 'Кабинет 1',
+            nvp: 'Кабинет 2',
+            art: 'Кабинет 3',
+            music: 'Кабинет 4',
+            management: 'Кабинет 5',
+            tech: 'Кабинет 6',
+            olympiad_math: 'Кабинет 7',
+            olympiad_history: 'Кабинет 8'
+        };
+
+        // Порядок направлений и их ключ перевода — используется в форме, легенде и модалке
+        const DIRECTION_ORDER = ['sport', 'nvp', 'art', 'music', 'management', 'tech', 'olympiad_math', 'olympiad_history'];
+        const DIRECTION_KEYS = {
+            sport: 'direction1',
+            nvp: 'direction2',
+            art: 'direction3',
+            music: 'direction4',
+            management: 'direction5',
+            tech: 'direction6',
+            olympiad_math: 'direction7',
+            olympiad_history: 'direction8'
         };
 
         const schoolsData = {
@@ -848,14 +952,6 @@
                 regSubtitle: "Қатысу үшін форманы толтырыңыз",
                 nameLabel: "Сіздің атыңыз",
                 namePlaceholder: "Аты-жөніңізді енгізіңіз",
-                roleLabel: "Лауазымыңыз:",
-                selectRole: "Лауазымды таңдаңыз",
-                roleDirector: "👔 Директор",
-                roleZavuchVR: "📋 Директордың тәрбие ісі жөніндегі орынбасары",
-                roleParent: "👨‍👩‍👦 Ата-ана",
-                roleCustom: "✏️ Басқа (өзін жазу)",
-                labelCustomRole: "Өз лауазымыңызды жазыңыз:",
-                customRolePlaceholder: "Мысалы: Психолог, Мұғалім...",
                 directionLabel: "Бағытыңыз:",
                 selectDirection: "Бағытты таңдаңыз",
                 direction1: "🏃 Дене шынықтыру және спорт, туризм секциясы",
@@ -864,6 +960,8 @@
                 direction4: "🎵 Қосымша білім беру секциясы: Музыка бағыты",
                 direction5: "📊 Қосымша білім беру секциясы: Басқару менеджмент бағыты",
                 direction6: "🔬 Қосымша білім беру секциясы: Ғылыми техникалық бағыт",
+                direction7: "🧮 Дарын бағыты: Олимпиадалық резерв (математика)",
+                direction8: "📜 Дарын бағыты: Олимпиадалық резерв (тарих)",
                 schoolLabel: "Мектебіңіз:",
                 schoolPlaceholder: "Тізімнен мектепті таңдаңыз...",
                 schoolCustom: "✏️ Басқа (өзін жазу)",
@@ -878,13 +976,12 @@
                 adminPanel: "",
                 qrTitle: "QR АРҚЫЛЫ ТІРКЕЛУ",
                 qrPlaceholder: "📱 QR код орны<br><small>Суретті кодқа жүктеңіз</small>",
+                roomsLegendTitle: "📍 Бағыттар мен кабинеттер",
+                modalDirectionLabel: "Бағыт:",
+                modalRoomLabel: "Кабинет:",
+                modalCloseBtn: "Жарайды",
                 participantsTitle: "Тіркелген қатысушылар",
                 total: "Барлығы",
-                filterAll: "Барлығы",
-                filterDirector: "👔 Директорлар",
-                filterZavuchVR: "📋 Тәрбие ісі жөніндегі орынбасарлар",
-                filterParent: "👨‍👩‍👦 Ата-аналар",
-                filterOther: "✏️ Басқалар",
                 loading: "Қатысушылар жүктелуде...",
                 empty: "Әзірге ешкім тіркелмеді",
                 setupNeeded: "Google Sheets интеграциясын баптаңыз",
@@ -894,7 +991,6 @@
                 backBtn: "← Артқа",
                 newParticipant: "✨ Жаңа қатысушы!",
                 alertName: "Өтінеміз, атыңызды енгізіңіз",
-                alertRole: "Өтінеміз, лауазымыңызды таңдаңыз",
                 alertSchool: "Өтінеміз, мектебіңізді таңдаңыз",
                 alertCustomSchool: "Өтінеміз, мектебіңіздің атауын жазыңыз",
                 alertDirection: "Өтінеміз, бағытты таңдаңыз"
@@ -904,14 +1000,6 @@
                 regSubtitle: "Заполните форму для участия",
                 nameLabel: "Ваше имя",
                 namePlaceholder: "Введите ваше имя",
-                roleLabel: "Ваша должность:",
-                selectRole: "Выберите должность",
-                roleDirector: "👔 Директор",
-                roleZavuchVR: "📋 Заместитель директора по ВР",
-                roleParent: "👨‍👩‍👦 Родитель",
-                roleCustom: "✏️ Другое (написать свою)",
-                labelCustomRole: "Напишите свою должность:",
-                customRolePlaceholder: "Например: Психолог, Учитель...",
                 directionLabel: "Ваше направление:",
                 selectDirection: "Выберите направление",
                 direction1: "🏃 Секция физической культуры и спорта, туризма",
@@ -920,6 +1008,8 @@
                 direction4: "🎵 Секция доп. образования: Музыкальное направление",
                 direction5: "📊 Секция доп. образования: Направление управленческого менеджмента",
                 direction6: "🔬 Секция доп. образования: Научно-техническое направление",
+                direction7: "🧮 Направление «Дарын»: Олимпийский резерв (математика)",
+                direction8: "📜 Направление «Дарын»: Олимпийский резерв (история)",
                 schoolLabel: "Ваша школа:",
                 schoolPlaceholder: "Выберите школу из списка...",
                 schoolCustom: "✏️ Другое (написать свою)",
@@ -934,13 +1024,12 @@
                 adminPanel: "",
                 qrTitle: "РЕГИСТРАЦИЯ ЧЕРЕЗ QR",
                 qrPlaceholder: "📱 Место для QR-кода<br><small>Загрузите изображение в код</small>",
+                roomsLegendTitle: "📍 Направления и кабинеты",
+                modalDirectionLabel: "Направление:",
+                modalRoomLabel: "Кабинет:",
+                modalCloseBtn: "Понятно",
                 participantsTitle: "Зарегистрированные участники",
                 total: "Всего",
-                filterAll: "Все",
-                filterDirector: "👔 Директора",
-                filterZavuchVR: "📋 Зам. директора по ВР",
-                filterParent: "👨‍👩‍👦 Родители",
-                filterOther: "✏️ Другие",
                 loading: "Загрузка участников...",
                 empty: "Пока никто не зарегистрировался",
                 setupNeeded: "Настройте интеграцию с Google Sheets",
@@ -950,7 +1039,6 @@
                 backBtn: "← Назад",
                 newParticipant: "✨ Новый участник!",
                 alertName: "Пожалуйста, введите ваше имя",
-                alertRole: "Пожалуйста, выберите вашу должность",
                 alertSchool: "Пожалуйста, выберите вашу школу",
                 alertCustomSchool: "Пожалуйста, напишите название вашей школы",
                 alertDirection: "Пожалуйста, выберите направление"
@@ -989,6 +1077,7 @@
             });
 
             renderSchoolDropdown();
+            renderRoomsLegend();
 
             if (participantsData.length > 0) {
                 renderParticipants();
@@ -999,32 +1088,49 @@
             document.getElementById('qrCode').innerHTML = `<img src="${CONFIG.qrCodeUrl}" alt="QR Code">`;
         }
 
-        let selectedRole = null;
         let selectedDirection = null;
-        let currentFilter = 'all';
         let lastParticipantsCount = 0;
         let participantsData =[];
         let shownParticipants = new Set(); 
 
-        const roleSelect = document.getElementById('roleSelect');
-        const customRoleGroup = document.getElementById('customRoleGroup');
-        const customRoleInput = document.getElementById('customRole');
-        
-        roleSelect.addEventListener('change', function() {
-            selectedRole = this.value;
-            if (this.value === 'custom') {
-                customRoleGroup.style.display = 'block';
-                customRoleInput.required = true;
-            } else {
-                customRoleGroup.style.display = 'none';
-                customRoleInput.required = false;
-                customRoleInput.value = '';
-            }
-        });
-
         const directionSelect = document.getElementById('directionSelect');
         directionSelect.addEventListener('change', function() {
             selectedDirection = this.value;
+        });
+
+        // ========================================
+        // ЛЕГЕНДА "НАПРАВЛЕНИЕ - КАБИНЕТ"
+        // ========================================
+        function renderRoomsLegend() {
+            const container = document.getElementById('roomsLegendList');
+            container.innerHTML = DIRECTION_ORDER.map(key => {
+                const label = translations[currentLang][DIRECTION_KEYS[key]];
+                const room = ROOM_MAP[key] || '—';
+                return `
+                    <div class="rooms-legend-row">
+                        <div class="rooms-legend-direction">${label}</div>
+                        <div class="rooms-legend-room">${room}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+        renderRoomsLegend();
+
+        // ========================================
+        // МОДАЛЬНОЕ ОКНО С НОМЕРОМ КАБИНЕТА
+        // ========================================
+        function showRoomModal(directionText, room) {
+            document.getElementById('modalSuccessText').textContent = translations[currentLang].successMsg;
+            document.getElementById('modalDirectionText').textContent = directionText;
+            document.getElementById('modalRoomText').textContent = room;
+            document.getElementById('roomModalOverlay').classList.add('show');
+        }
+        function hideRoomModal() {
+            document.getElementById('roomModalOverlay').classList.remove('show');
+        }
+        document.getElementById('modalCloseBtn').addEventListener('click', hideRoomModal);
+        document.getElementById('roomModalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) hideRoomModal();
         });
 
         // ========================================
@@ -1130,15 +1236,6 @@
         }
 
 
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentFilter = this.dataset.filter;
-                renderParticipants();
-            });
-        });
-
         // Отправка формы
         document.getElementById('regForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -1148,14 +1245,6 @@
             
             if (!name) {
                 alert(translations[currentLang].alertName);
-                return;
-            }
-            if (!selectedRole) {
-                alert(translations[currentLang].alertRole);
-                return;
-            }
-            if (selectedRole === 'custom' && !customRoleInput.value.trim()) {
-                alert(translations[currentLang].alertRole);
                 return;
             }
             if (!selectedDirection) {
@@ -1186,27 +1275,8 @@
             submitBtn.disabled = true;
             submitBtn.textContent = translations[currentLang].submitting;
 
-            let roleToSave;
-            if (selectedRole === 'custom') {
-                roleToSave = customRoleInput.value.trim();
-            } else {
-                const roleKeyMap = {
-                    'director': 'roleDirector',
-                    'zavuch_vr': 'roleZavuchVR',
-                    'parent': 'roleParent'
-                };
-                roleToSave = translations[currentLang][roleKeyMap[selectedRole]];
-            }
-
-            const directionKeyMap = {
-                'sport': 'direction1',
-                'nvp': 'direction2',
-                'art': 'direction3',
-                'music': 'direction4',
-                'management': 'direction5',
-                'tech': 'direction6'
-            };
-            const directionToSave = translations[currentLang][directionKeyMap[selectedDirection]];
+            const directionToSave = translations[currentLang][DIRECTION_KEYS[selectedDirection]];
+            const roomToShow = ROOM_MAP[selectedDirection] || '—';
 
             try {
                 await fetch(CONFIG.webAppUrl, {
@@ -1216,24 +1286,19 @@
                     body: JSON.stringify({
                         action: 'addRegistration',
                         name: name,
-                        role: roleToSave, 
                         school: finalSchool, // отправляем финальное название школы
                         direction: directionToSave, // выбранное направление
                         timestamp: new Date().toLocaleString('ru-RU')
                     })
                 });
 
-                document.getElementById('successMessage').classList.add('show');
+                showRoomModal(directionToSave, roomToShow);
                 
                 // Очистка формы после успеха
                 document.getElementById('name').value = '';
                 hiddenSchoolInput.value = '';
                 schoolSelectedText.textContent = translations[currentLang].schoolPlaceholder;
                 schoolSelectedText.style.color = '#666';
-                selectedRole = null;
-                roleSelect.value = '';
-                customRoleInput.value = '';
-                customRoleGroup.style.display = 'none';
                 selectedDirection = null;
                 directionSelect.value = '';
                 
@@ -1243,7 +1308,6 @@
                 customSchoolInput.value = '';
                 
                 setTimeout(() => loadParticipants(), 1000);
-                setTimeout(() => document.getElementById('successMessage').classList.remove('show'), 3000);
 
             } catch (error) {
                 console.error('Error:', error);
@@ -1255,20 +1319,7 @@
             submitBtn.textContent = translations[currentLang].submitBtn;
         });
 
-        // Умный поиск для фильтра
-        function normalizeRole(roleString) {
-            if (!roleString) return 'other';
-            const s = roleString.toLowerCase();
-            
-            // Сначала проверяем на завучей, чтобы "Заместитель директора" не воспринялся как "Директор"
-            if (s.includes('тәрбие') || s.includes('заместитель') || s.includes('зам') || s.includes('орынбасар')) return 'zavuch_vr';
-            // Затем проверяем на директоров
-            if (s.includes('директор') || s.includes('director')) return 'director';
-            if (s.includes('родитель') || s.includes('ата-ана')) return 'parent';
-            
-            return 'other'; 
-        }
-
+        // Умный поиск иконки направления
         function normalizeDirection(directionString) {
             if (!directionString) return 'other';
             const s = directionString.toLowerCase();
@@ -1279,6 +1330,8 @@
             if (s.includes('музыка') || s.includes('музык')) return 'music';
             if (s.includes('менеджмент')) return 'management';
             if (s.includes('ғылыми') || s.includes('техник') || s.includes('научно')) return 'tech';
+            if (s.includes('математика') || s.includes('math')) return 'olympiad_math';
+            if (s.includes('тарих') || s.includes('истори')) return 'olympiad_history';
 
             return 'other';
         }
@@ -1308,23 +1361,18 @@
 
         function renderParticipants() {
             const listContainer = document.getElementById('participantsList');
-            
-            let filtered = participantsData;
-            if (currentFilter !== 'all') {
-                filtered = participantsData.filter(r => normalizeRole(r[1]) === currentFilter);
-            }
 
-            if (filtered.length === 0) {
+            if (participantsData.length === 0) {
                 listContainer.innerHTML = `<div class="empty-state"><div class="empty-state-icon">👥</div><p>${translations[currentLang].empty}</p></div>`;
                 return;
             }
 
-            listContainer.innerHTML = filtered
+            listContainer.innerHTML = participantsData
+                .slice()
                 .reverse()
                 .map((reg, index) => {
                     // Порядок колонок в таблице: Аты-тегі, Должность, Мектеп, Уақыты, Бағыт
                     let name = reg[0];
-                    let role = reg[1];
                     let school = reg[2] || '—';
                     let timestamp = reg[3] || '—';
                     let direction = reg[4] || '—';
@@ -1342,21 +1390,27 @@
                         }, 3000);
                     }
                     
-                    const nRole = normalizeRole(role);
-                    let roleIcon = '👤';
-                    if (nRole === 'director') roleIcon = '👔';
-                    if (nRole === 'zavuch_vr') roleIcon = '📋';
-                    if (nRole === 'parent') roleIcon = '👨‍👩‍👦';
-                    if (nRole === 'other') roleIcon = '✏️';
+                    const nDirection = normalizeDirection(direction);
+                    let directionIcon = '📌';
+                    if (nDirection === 'sport') directionIcon = '🏃';
+                    if (nDirection === 'nvp') directionIcon = '🎖️';
+                    if (nDirection === 'art') directionIcon = '🎨';
+                    if (nDirection === 'music') directionIcon = '🎵';
+                    if (nDirection === 'management') directionIcon = '📊';
+                    if (nDirection === 'tech') directionIcon = '🔬';
+                    if (nDirection === 'olympiad_math') directionIcon = '🧮';
+                    if (nDirection === 'olympiad_history') directionIcon = '📜';
+
+                    const room = ROOM_MAP[nDirection] || '—';
 
                     return `
                         <div class="participant-item ${isNew ? 'new' : ''}" data-participant-id="${participantId}">
-                            <div class="participant-avatar">${roleIcon}</div>
+                            <div class="participant-avatar">${directionIcon}</div>
                             <div class="participant-info">
                                 <div class="participant-name">${name}</div>
                                 <div class="participant-school">🏫 ${school}</div>
-                                <div class="participant-role">${role}</div>
                                 <div class="participant-direction">${direction}</div>
+                                <div class="participant-room-tag">🚪 ${room}</div>
                                 <div class="participant-time">${timestamp}</div>
                             </div>
                         </div>
