@@ -555,7 +555,7 @@
             border-radius: 8px;
             font-weight: 700;
             font-size: 13px;
-            white-space: nowrap;
+            text-align: center;
             flex-shrink: 0;
         }
 
@@ -592,7 +592,8 @@
         }
         .modal-direction-value { font-size: 16px; color: #333; font-weight: 600; margin-top: 5px; }
         .modal-room-value {
-            font-size: 34px;
+            font-size: 24px;
+            line-height: 1.3;
             color: #667eea;
             font-weight: 800;
             margin-top: 5px;
@@ -815,20 +816,29 @@
         };
 
         // ========================================
-        // КАБИНЕТЫ (ЗАГЛУШКА)
-        // Когда узнаете реальные номера кабинетов — просто замените
-        // значения справа на настоящие, порядок ключей менять не нужно.
+        // КАБИНЕТЫ И ЭТАЖИ (ЗАГЛУШКА)
+        // Когда узнаете реальные этажи/номера кабинетов — просто замените
+        // цифры floor и room на настоящие, порядок ключей менять не нужно.
         // ========================================
         const ROOM_MAP = {
-            sport: 'Кабинет 1',
-            nvp: 'Кабинет 2',
-            art: 'Кабинет 3',
-            music: 'Кабинет 4',
-            management: 'Кабинет 5',
-            tech: 'Кабинет 6',
-            olympiad_math: 'Кабинет 7',
-            olympiad_history: 'Кабинет 8'
+            sport: { floor: 1, room: 1 },
+            nvp: { floor: 1, room: 2 },
+            art: { floor: 1, room: 3 },
+            music: { floor: 2, room: 4 },
+            management: { floor: 2, room: 5 },
+            tech: { floor: 2, room: 6 },
+            olympiad_math: { floor: 3, room: 7 },
+            olympiad_history: { floor: 3, room: 8 }
         };
+
+        // Единая функция форматирования "этаж + кабинет" — используется в легенде, модалке и карточках
+        function getRoomLabel(directionKey) {
+            const info = ROOM_MAP[directionKey];
+            if (!info) return '—';
+            const floorWord = translations[currentLang].floorWord;
+            const roomWord = translations[currentLang].roomWord;
+            return `${info.floor}-${floorWord}, ${info.room}-${roomWord}`;
+        }
 
         // Порядок направлений и их ключ перевода — используется в форме, легенде и модалке
         const DIRECTION_ORDER = ['sport', 'nvp', 'art', 'music', 'management', 'tech', 'olympiad_math', 'olympiad_history'];
@@ -980,6 +990,8 @@
                 modalDirectionLabel: "Бағыт:",
                 modalRoomLabel: "Кабинет:",
                 modalCloseBtn: "Жарайды",
+                floorWord: "қабат",
+                roomWord: "кабинет",
                 participantsTitle: "Тіркелген қатысушылар",
                 total: "Барлығы",
                 loading: "Қатысушылар жүктелуде...",
@@ -1028,6 +1040,8 @@
                 modalDirectionLabel: "Направление:",
                 modalRoomLabel: "Кабинет:",
                 modalCloseBtn: "Понятно",
+                floorWord: "этаж",
+                roomWord: "кабинет",
                 participantsTitle: "Зарегистрированные участники",
                 total: "Всего",
                 loading: "Загрузка участников...",
@@ -1105,7 +1119,7 @@
             const container = document.getElementById('roomsLegendList');
             container.innerHTML = DIRECTION_ORDER.map(key => {
                 const label = translations[currentLang][DIRECTION_KEYS[key]];
-                const room = ROOM_MAP[key] || '—';
+                const room = getRoomLabel(key);
                 return `
                     <div class="rooms-legend-row">
                         <div class="rooms-legend-direction">${label}</div>
@@ -1276,7 +1290,7 @@
             submitBtn.textContent = translations[currentLang].submitting;
 
             const directionToSave = translations[currentLang][DIRECTION_KEYS[selectedDirection]];
-            const roomToShow = ROOM_MAP[selectedDirection] || '—';
+            const roomToShow = getRoomLabel(selectedDirection);
 
             try {
                 await fetch(CONFIG.webAppUrl, {
@@ -1401,7 +1415,7 @@
                     if (nDirection === 'olympiad_math') directionIcon = '🧮';
                     if (nDirection === 'olympiad_history') directionIcon = '📜';
 
-                    const room = ROOM_MAP[nDirection] || '—';
+                    const room = getRoomLabel(nDirection);
 
                     return `
                         <div class="participant-item ${isNew ? 'new' : ''}" data-participant-id="${participantId}">
