@@ -260,106 +260,6 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        /* --- СТИЛИ ДЛЯ ВЫПАДАЮЩЕГО СПИСКА С ПОИСКОМ (ШКОЛА) --- */
-        .custom-select-wrapper {
-            position: relative;
-            user-select: none;
-            width: 100%;
-        }
-        .custom-select {
-            position: relative;
-            width: 100%;
-        }
-        .custom-select-trigger {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            background: white;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s;
-            color: #666;
-        }
-        .custom-select-trigger.selected { color: #333; }
-        .custom-select.open .custom-select-trigger {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        .select-arrow {
-            width: 12px; height: 12px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667eea' d='M10.293 3.293L6 7.586 1.707 3.293A1 1 0 00.293 4.707l5 5a1 1 0 001.414 0l5-5a1 1 0 10-1.414-1.414z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            transition: transform 0.3s;
-        }
-        .custom-select.open .select-arrow { transform: rotate(180deg); }
-        .custom-options {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-top: 5px;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: all 0.3s;
-            z-index: 999;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid #e0e0e0;
-        }
-        .custom-select.open .custom-options {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: all;
-        }
-        .custom-select-search {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            background: #f8f9ff;
-        }
-        .custom-select-search input {
-            width: 100%;
-            padding: 10px 15px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
-        }
-        .custom-select-search input:focus { border-color: #667eea; }
-        .options-container {
-            max-height: 220px;
-            overflow-y: auto;
-        }
-        .custom-option {
-            padding: 12px 15px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-            color: #333;
-            border-bottom: 1px solid #f9f9f9;
-        }
-        .custom-option:hover {
-            background: #f0f4ff;
-            color: #667eea;
-            font-weight: 600;
-        }
-        .custom-option.hidden { display: none; }
-        .no-results {
-            padding: 15px;
-            text-align: center;
-            color: #999;
-            font-size: 14px;
-            display: none;
-        }
-
         /* ----------------------------------------------------- */
 
         .submit-btn {
@@ -504,7 +404,6 @@
 
         .participant-info { flex: 1; }
         .participant-name { font-weight: 600; color: #333; font-size: 16px; margin-bottom: 3px; }
-        .participant-school { font-size: 13px; color: #667eea; font-weight: 600; margin-bottom: 2px; }
         .participant-direction { font-size: 13px; color: #764ba2; font-weight: 600; margin-top: 2px; }
         .participant-room-tag {
             display: inline-block;
@@ -702,32 +601,6 @@
                     </select>
                 </div>
 
-                <div class="form-group custom-select-wrapper">
-                    <label data-i18n="schoolLabel">Мектебіңіз:</label>
-                    <div class="custom-select" id="schoolSelect">
-                        <div class="custom-select-trigger" id="schoolTrigger">
-                            <span id="schoolSelectedText" data-i18n="schoolPlaceholder">Тізімнен мектепті таңдаңыз...</span>
-                            <div class="select-arrow"></div>
-                        </div>
-                        <div class="custom-options">
-                            <div class="custom-select-search">
-                                <input type="text" id="schoolSearchInput" placeholder="Іздеу..." autocomplete="off">
-                            </div>
-                            <div class="options-container" id="schoolsOptionsContainer">
-                                <!-- Опции будут добавлены через JS -->
-                            </div>
-                            <div class="no-results" id="noSchoolResults" data-i18n="noResults">Мектеп табылмады</div>
-                        </div>
-                    </div>
-                    <input type="hidden" id="school">
-                </div>
-
-                <!-- НОВОЕ: Поле для ввода своей школы (скрыто по умолчанию) -->
-                <div class="form-group" id="customSchoolGroup" style="display: none;">
-                    <label data-i18n="labelCustomSchool">Өз мектебіңізді жазыңыз:</label>
-                    <input type="text" id="customSchool" data-i18n-placeholder="customSchoolPlaceholder" placeholder="Мектеп атауын енгізіңіз">
-                </div>
-
                 <button type="submit" class="submit-btn" id="submitBtn" data-i18n="submitBtn">Тіркелу</button>
             </form>
 
@@ -853,109 +726,6 @@
             olympiad_history: 'direction8'
         };
 
-        const schoolsData = {
-            kk:[
-                "«Абылай хан атындағы орта мектеп» КММ",
-                "«Абай атындағы орта мектеп» КММ /Есік/",
-                "«Х.Абдуллин атындағы орта мектеп» КММ",
-                "«Ы.Алтынсарин орта мектебі» КММ",
-                "«Алға орта мектебі - МДШО» КММ",
-                "«Т.Аубакиров атындағы орта мектеп» КММ",
-                "«Азат негізгі орта мектеп» КММ",
-                "«№1 Азат орта мектебі» КММ",
-                "«Ақбастау орта мектебі» КММ",
-                "«Әл-Фараби атындағы орта мектеп» КММ",
-                "«Әймен орта мектебі» КММ",
-                "«Балтабай орта мектебі» КММ",
-                "«Баяндай негізгі орта мектебі» КММ",
-                "«Байтұрсынов орта мектебі» КММ",
-                "«Бәйтерек орта мектебі» КММ",
-                "«Бөлек батыр орта мектебі» КММ",
-                "«Ә. Бөкейхан орта мектебі» КММ",
-                "«М.Горький атындағы орта мектеп» КММ",
-                "«Еңбек орта мектебі» КММ",
-                "«Екпінді орта мектебі» КММ",
-                "«О. Жандосов атындағы орта мектеп» КММ",
-                "«І.Жансүгіров атындағы орта мектеп МДШО» КММ",
-                "«Жексембеков атындағы орта мектеп» КММ",
-                "«Көктөбе орта мектебі» КММ",
-                "«Қайрат НОМ» КММ",
-                "«№6 қазақ орта мектеп-лицей» КММ",
-                "«Казатком негізгі орта мектеп» КММ",
-                "«Құрөзек негізгі орта мектебі» КММ",
-                "«Қойшыбек орта мектебі» КММ",
-                "«Д.Қонаев атындағы орта мектеп» КММ",
-                "«М.Ломоносов атындағы орта мектеп» КММ",
-                "«Б.Майлин атындағы орта мектеп» КММ",
-                "«Омар Мухаммадий атындағы орта мектеп» КММ",
-                "«Орынбетов орта мектебі» КММ",
-                "«Н.Островский атындағы орта мектеп» КММ",
-                "«Рахат орта мектебі» КММ",
-                "«Рахат ауылдық округі №1 орта мектебі» КММ",
-                "«Райымбек батыр атындағы орта мектеп» КММ",
-                "«Т.Рысқұлов атындағы орта мектеп» КММ",
-                "«Садыр атындағы орта мектеп» КММ",
-                "«Қ. Сәтпаев атындағы орта мектеп» КММ",
-                "«Таутүрген НОМ» КММ",
-                "«Талдыбұлақ орта мектебі» КММ",
-                "«В.Терешкова атындағы орта мектеп» КММ",
-                "«Р.Тоқатаев атындағы орта мектеп» КММ",
-                "«Төле би орта мектебі» КММ",
-                "«И.Шорманов орта мектебі» КММ",
-                "«Ш.Уәлиханов атындағы орта мектеп» КММ"
-            ],
-            ru:[
-                "КГУ «Средняя школа имени Абылай хана»",
-                "КГУ «Средняя школа имени Абая» /Есик/",
-                "КГУ «Средняя школа имени Х. Абдуллина»",
-                "КГУ «Средняя школа им. Ы. Алтынсарина»",
-                "КГУ «Средняя школа Алга - ДМЦ»",
-                "КГУ «Средняя школа имени Т. Аубакирова»",
-                "КГУ «Основная средняя школа Азат»",
-                "КГУ «Средняя школа №1 Азат»",
-                "КГУ «Средняя школа Акбастау»",
-                "КГУ «Средняя школа имени Аль-Фараби»",
-                "КГУ «Средняя школа Аймен»",
-                "КГУ «Средняя школа Балтабай»",
-                "КГУ «Основная средняя школа Баяндай»",
-                "КГУ «Средняя школа им. Байтурсынова»",
-                "КГУ «Средняя школа Байтерек»",
-                "КГУ «Средняя школа Болек батыр»",
-                "КГУ «Средняя школа им. А. Бокейхана»",
-                "КГУ «Средняя школа имени М. Горького»",
-                "КГУ «Средняя школа Енбек»",
-                "КГУ «Средняя школа Екпинди»",
-                "КГУ «Средняя школа имени О. Жандосова»",
-                "КГУ «Средняя школа имени И. Жансугурова - ДМЦ»",
-                "КГУ «Средняя школа имени Жексембекова»",
-                "КГУ «Средняя школа Коктобе»",
-                "КГУ «Основная средняя школа Кайрат»",
-                "КГУ «Казахская средняя школа-лицей №6»",
-                "КГУ «Основная средняя школа Казатком»",
-                "КГУ «Основная средняя школа Курозек»",
-                "КГУ «Средняя школа Койшыбек»",
-                "КГУ «Средняя школа имени Д. Конаева»",
-                "КГУ «Средняя школа имени М. Ломоносова»",
-                "КГУ «Средняя школа имени Б. Майлина»",
-                "КГУ «Средняя школа имени Омара Мухаммади»",
-                "КГУ «Средняя школа Орынбетова»",
-                "КГУ «Средняя школа имени Н. Островского»",
-                "КГУ «Средняя школа Рахат»",
-                "КГУ «Средняя школа №1 Рахатского сельского округа»",
-                "КГУ «Средняя школа имени Райымбек батыра»",
-                "КГУ «Средняя школа имени Т. Рыскулова»",
-                "КГУ «Средняя школа имени Садыра»",
-                "КГУ «Средняя школа имени К. Сатпаева»",
-                "КГУ «Основная средняя школа Таутурген»",
-                "КГУ «Средняя школа Талдыбулак»",
-                "КГУ «Средняя школа имени В. Терешковой»",
-                "КГУ «Средняя школа имени Р. Токатаева»",
-                "КГУ «Средняя школа Толе би»",
-                "КГУ «Средняя школа И. Шорманова»",
-                "КГУ «Средняя школа имени Ш. Уалиханова»"
-            ]
-        };
-
         const translations = {
             kk: {
                 regTitle: "Тіркелу",
@@ -972,13 +742,6 @@
                 direction6: "🔬 Қосымша білім беру секциясы: Ғылыми техникалық бағыт",
                 direction7: "🧮 Дарын бағыты: Олимпиадалық резерв (математика)",
                 direction8: "📜 Дарын бағыты: Олимпиадалық резерв (тарих)",
-                schoolLabel: "Мектебіңіз:",
-                schoolPlaceholder: "Тізімнен мектепті таңдаңыз...",
-                schoolCustom: "✏️ Басқа (өзін жазу)",
-                labelCustomSchool: "Өз мектебіңізді жазыңыз:",
-                customSchoolPlaceholder: "Мектеп атауын енгізіңіз",
-                searchPlaceholder: "Мектепті іздеу...",
-                noResults: "Мектеп табылмады",
                 submitBtn: "Тіркелу",
                 submitting: "Тіркелу...",
                 successMsg: "✅ Сіз сәтті тіркелдіңіз!",
@@ -1003,8 +766,6 @@
                 backBtn: "← Артқа",
                 newParticipant: "✨ Жаңа қатысушы!",
                 alertName: "Өтінеміз, атыңызды енгізіңіз",
-                alertSchool: "Өтінеміз, мектебіңізді таңдаңыз",
-                alertCustomSchool: "Өтінеміз, мектебіңіздің атауын жазыңыз",
                 alertDirection: "Өтінеміз, бағытты таңдаңыз"
             },
             ru: {
@@ -1022,13 +783,6 @@
                 direction6: "🔬 Секция доп. образования: Научно-техническое направление",
                 direction7: "🧮 Направление «Дарын»: Олимпийский резерв (математика)",
                 direction8: "📜 Направление «Дарын»: Олимпийский резерв (история)",
-                schoolLabel: "Ваша школа:",
-                schoolPlaceholder: "Выберите школу из списка...",
-                schoolCustom: "✏️ Другое (написать свою)",
-                labelCustomSchool: "Напишите свою школу:",
-                customSchoolPlaceholder: "Введите название школы",
-                searchPlaceholder: "Поиск школы...",
-                noResults: "Школа не найдена",
                 submitBtn: "Зарегистрироваться",
                 submitting: "Регистрация...",
                 successMsg: "✅ Вы успешно зарегистрированы!",
@@ -1053,14 +807,11 @@
                 backBtn: "← Назад",
                 newParticipant: "✨ Новый участник!",
                 alertName: "Пожалуйста, введите ваше имя",
-                alertSchool: "Пожалуйста, выберите вашу школу",
-                alertCustomSchool: "Пожалуйста, напишите название вашей школы",
                 alertDirection: "Пожалуйста, выберите направление"
             }
         };
 
         let currentLang = 'kk'; 
-        let isCustomSchoolSelected = false; // Отслеживает, выбрал ли человек пункт "Написать свою школу"
 
         function confirmLanguage(lang) {
             setLanguage(lang);
@@ -1090,7 +841,6 @@
                 }
             });
 
-            renderSchoolDropdown();
             renderRoomsLegend();
 
             if (participantsData.length > 0) {
@@ -1147,115 +897,12 @@
             if (e.target === this) hideRoomModal();
         });
 
-        // ========================================
-        // ЛОГИКА КАСТОМНОГО ВЫПАДАЮЩЕГО СПИСКА ШКОЛ
-        // ========================================
-        const schoolSelect = document.getElementById('schoolSelect');
-        const schoolTrigger = document.getElementById('schoolTrigger');
-        const schoolSelectedText = document.getElementById('schoolSelectedText');
-        const schoolSearchInput = document.getElementById('schoolSearchInput');
-        const schoolsOptionsContainer = document.getElementById('schoolsOptionsContainer');
-        const hiddenSchoolInput = document.getElementById('school');
-        const noSchoolResults = document.getElementById('noSchoolResults');
-        const customSchoolGroup = document.getElementById('customSchoolGroup');
-        const customSchoolInput = document.getElementById('customSchool');
-
-        schoolTrigger.addEventListener('click', () => {
-            schoolSelect.classList.toggle('open');
-            if (schoolSelect.classList.contains('open')) {
-                schoolSearchInput.value = '';
-                filterSchools('');
-                schoolSearchInput.focus();
-            }
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!schoolSelect.contains(e.target)) {
-                schoolSelect.classList.remove('open');
-            }
-        });
-
-        schoolSearchInput.addEventListener('input', (e) => {
-            filterSchools(e.target.value);
-        });
-
-        function filterSchools(query) {
-            query = query.toLowerCase();
-            const options = schoolsOptionsContainer.querySelectorAll('.custom-option');
-            let hasVisible = false;
-
-            options.forEach(opt => {
-                // Всегда оставлять видимым пункт "Другое (написать свою)"
-                if (opt.dataset.type === 'custom') {
-                    opt.classList.remove('hidden');
-                    hasVisible = true;
-                } else if (opt.textContent.toLowerCase().includes(query)) {
-                    opt.classList.remove('hidden');
-                    hasVisible = true;
-                } else {
-                    opt.classList.add('hidden');
-                }
-            });
-
-            if (hasVisible) {
-                noSchoolResults.style.display = 'none';
-            } else {
-                noSchoolResults.style.display = 'block';
-            }
-        }
-
-        function renderSchoolDropdown() {
-            schoolsOptionsContainer.innerHTML = '';
-            
-            // 1. Добавляем опцию "Написать свою школу" в самый верх
-            const customDiv = document.createElement('div');
-            customDiv.className = 'custom-option';
-            customDiv.dataset.type = 'custom'; // Спец. метка для фильтра
-            customDiv.innerHTML = `<strong>${translations[currentLang].schoolCustom}</strong>`;
-            customDiv.addEventListener('click', () => {
-                schoolSelectedText.textContent = translations[currentLang].schoolCustom;
-                schoolSelectedText.style.color = '#333';
-                hiddenSchoolInput.value = 'custom';
-                isCustomSchoolSelected = true;
-                customSchoolGroup.style.display = 'block';
-                schoolSelect.classList.remove('open');
-            });
-            schoolsOptionsContainer.appendChild(customDiv);
-
-            // 2. Добавляем остальные школы из списка
-            schoolsData[currentLang].forEach((schoolName) => {
-                const div = document.createElement('div');
-                div.className = 'custom-option';
-                div.textContent = schoolName;
-                div.addEventListener('click', () => {
-                    schoolSelectedText.textContent = schoolName;
-                    schoolSelectedText.style.color = '#333';
-                    hiddenSchoolInput.value = schoolName;
-                    isCustomSchoolSelected = false;
-                    customSchoolGroup.style.display = 'none';
-                    customSchoolInput.value = ''; // очищаем поле, если оно было заполнено
-                    schoolSelect.classList.remove('open');
-                });
-                schoolsOptionsContainer.appendChild(div);
-            });
-
-            // Сброс при смене языка
-            hiddenSchoolInput.value = '';
-            isCustomSchoolSelected = false;
-            customSchoolGroup.style.display = 'none';
-            customSchoolInput.value = '';
-            schoolSelectedText.textContent = translations[currentLang].schoolPlaceholder;
-            schoolSelectedText.style.color = '#666';
-            schoolSearchInput.placeholder = translations[currentLang].searchPlaceholder;
-        }
-
 
         // Отправка формы
         document.getElementById('regForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const name = document.getElementById('name').value.trim();
-            let finalSchool = hiddenSchoolInput.value.trim(); 
             
             if (!name) {
                 alert(translations[currentLang].alertName);
@@ -1264,19 +911,6 @@
             if (!selectedDirection) {
                 alert(translations[currentLang].alertDirection);
                 return;
-            }
-            if (!finalSchool) {
-                alert(translations[currentLang].alertSchool);
-                return;
-            }
-
-            // Если выбрана "Своя школа", берем значение из текстового поля
-            if (isCustomSchoolSelected) {
-                finalSchool = customSchoolInput.value.trim();
-                if (!finalSchool) {
-                    alert(translations[currentLang].alertCustomSchool);
-                    return;
-                }
             }
 
             if (CONFIG.webAppUrl.includes('YOUR_WEB_APP_URL')) {
@@ -1300,7 +934,6 @@
                     body: JSON.stringify({
                         action: 'addRegistration',
                         name: name,
-                        school: finalSchool, // отправляем финальное название школы
                         direction: directionToSave, // выбранное направление
                         timestamp: new Date().toLocaleString('ru-RU')
                     })
@@ -1310,16 +943,9 @@
                 
                 // Очистка формы после успеха
                 document.getElementById('name').value = '';
-                hiddenSchoolInput.value = '';
-                schoolSelectedText.textContent = translations[currentLang].schoolPlaceholder;
-                schoolSelectedText.style.color = '#666';
                 selectedDirection = null;
                 directionSelect.value = '';
                 
-                // Сброс кастомной школы
-                isCustomSchoolSelected = false;
-                customSchoolGroup.style.display = 'none';
-                customSchoolInput.value = '';
                 
                 setTimeout(() => loadParticipants(), 1000);
 
@@ -1387,7 +1013,6 @@
                 .map((reg, index) => {
                     // Порядок колонок в таблице: Аты-тегі, Должность, Мектеп, Уақыты, Бағыт
                     let name = reg[0];
-                    let school = reg[2] || '—';
                     let timestamp = reg[3] || '—';
                     let direction = reg[4] || '—';
 
@@ -1422,7 +1047,6 @@
                             <div class="participant-avatar">${directionIcon}</div>
                             <div class="participant-info">
                                 <div class="participant-name">${name}</div>
-                                <div class="participant-school">🏫 ${school}</div>
                                 <div class="participant-direction">${direction}</div>
                                 <div class="participant-room-tag">🚪 ${room}</div>
                                 <div class="participant-time">${timestamp}</div>
