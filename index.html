@@ -458,60 +458,6 @@
             flex-shrink: 0;
         }
 
-        /* --- МОДАЛЬНОЕ ОКНО С НОМЕРОМ КАБИНЕТА --- */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .modal-overlay.show { display: flex; animation: fadeIn 0.25s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .modal-box {
-            background: white;
-            border-radius: 20px;
-            padding: 35px 30px;
-            max-width: 380px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-            animation: modalPop 0.3s ease;
-        }
-        @keyframes modalPop {
-            from { opacity: 0; transform: scale(0.85); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .modal-box h3 { color: #333; font-size: 20px; margin-bottom: 5px; }
-        .modal-direction-label, .modal-room-label {
-            font-size: 12px; color: #999; font-weight: 700; text-transform: uppercase; margin-top: 18px; letter-spacing: 0.5px;
-        }
-        .modal-direction-value { font-size: 16px; color: #333; font-weight: 600; margin-top: 5px; }
-        .modal-room-value {
-            font-size: 24px;
-            line-height: 1.3;
-            color: #667eea;
-            font-weight: 800;
-            margin-top: 5px;
-        }
-        .modal-close-btn {
-            margin-top: 28px;
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .modal-close-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4); }
-
         .loading, .empty-state { text-align: center; padding: 40px; color: #999; }
         .empty-state-icon { font-size: 64px; margin-bottom: 20px; opacity: 0.5; }
 
@@ -590,18 +536,16 @@
                     <label data-i18n="directionLabel">Бағытыңыз:</label>
                     <select id="directionSelect" class="role-select">
                         <option value="" data-i18n="selectDirection" selected>Бағытты таңдаңыз</option>
-                        <option value="sport" data-i18n="direction1">🏃 Дене шынықтыру</option>
-                        <option value="psy_school" data-i18n="direction2">🧑‍🏫 Педагог-психологтар (мектеп)</option>
-                        <option value="it" data-i18n="direction3">💻 IT-мамандар, информатика</option>
-                        <option value="psy_kindergarten" data-i18n="direction4">🧸 Балабақша педагог-психологтары</option>
-                        <option value="olympiad_reserve" data-i18n="direction5">🏅 Олимпиадалық резервке дайындайтын педагогтер</option>
-                        <option value="olympiad_history" data-i18n="direction6">📜 Олимпиадалық резервке дайындайтын педагогтер (тарих пәні)</option>
-                        <option value="psy_college" data-i18n="direction7">🎓 Педагог-психологтар (колледж)</option>
-                        <option value="nvp_tech" data-i18n="direction8">🎖️ Алғашқы әскери және технологиялық дайындық</option>
-                        <option value="management" data-i18n="direction9">📊 Басқару менеджмент бағыты</option>
-                        <option value="music" data-i18n="direction10">🎵 Музыка бағыты</option>
-                        <option value="art" data-i18n="direction11">🎨 Көркем-эстетикалық бағыт</option>
-                        <option value="tech" data-i18n="direction12">🔬 Ғылыми техникалық бағыт</option>
+                        <option value="tech" data-i18n="direction1">🔬 Ғылыми-техникалық бағыт</option>
+                        <option value="tourism" data-i18n="direction2">🧭 Туризм және өлкетану бағыты</option>
+                        <option value="eco" data-i18n="direction3">🌿 Экологиялық-биологиялық бағыт</option>
+                        <option value="art" data-i18n="direction4">🎨 Көркемдік-эстетикалық бағыт</option>
+                        <option value="music" data-i18n="direction5">🎵 Музыкалық бағыт</option>
+                        <option value="social_ped" data-i18n="direction6">🧑‍🏫 Әлеуметтік-педагогикалық бағыт</option>
+                        <option value="humanities" data-i18n="direction7">📚 Гуманитарлық бағыт (тіл курстары)</option>
+                        <option value="math" data-i18n="direction8">🧮 Жаратылыстану-математикалық бағыт (математикалық курстар)</option>
+                        <option value="sport" data-i18n="direction9">🏃 Спорт бағыты</option>
+                        <option value="directors" data-i18n="direction10">🏫 Қосымша білім беру директорлары</option>
                     </select>
                 </div>
 
@@ -655,18 +599,6 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="roomModalOverlay">
-        <div class="modal-box">
-            <h3 id="modalSuccessText"></h3>
-            <div class="modal-direction-label" data-i18n="modalDirectionLabel">Бағыт:</div>
-            <div class="modal-direction-value" id="modalDirectionText"></div>
-            <div class="modal-room-label" data-i18n="modalRoomLabel">Кабинет:</div>
-            <div class="modal-room-value" id="modalRoomText"></div>
-            <button class="modal-close-btn" id="modalCloseBtn" data-i18n="modalCloseBtn">Жарайды</button>
-        </div>
-    </div>
-
-
     <div class="container admin-panel" id="adminPanel">
         <div class="header">
             <h1 data-i18n="adminHeader"></h1>
@@ -696,18 +628,16 @@
         // КАБИНЕТЫ И ЭТАЖИ (РЕАЛЬНЫЕ ДАННЫЕ)
         // ========================================
         const ROOM_MAP = {
-            sport: { kk: '2-қабат, Мәжіліс залы', ru: '2 этаж, Актовый зал' },
-            psy_school: { kk: '3-қабат, 8-кабинет', ru: '3 этаж, кабинет 8' },
-            it: { kk: '3-қабат, 9-кабинет', ru: '3 этаж, кабинет 9' },
-            psy_kindergarten: { kk: '3-қабат, 10-кабинет', ru: '3 этаж, кабинет 10' },
-            olympiad_reserve: { kk: '3-қабат, 11-кабинет', ru: '3 этаж, кабинет 11' },
-            olympiad_history: { kk: '3-қабат, 12-кабинет', ru: '3 этаж, кабинет 12' },
-            psy_college: { kk: '3-қабат, 14-кабинет', ru: '3 этаж, кабинет 14' },
-            nvp_tech: { kk: '3-қабат, 6-кабинет', ru: '3 этаж, кабинет 6' },
-            management: { kk: '2-қабат, Әдістемелік кабинет', ru: '2 этаж, Методический кабинет' },
-            music: { kk: '2-қабат, 7-кабинет', ru: '2 этаж, кабинет 7' },
-            art: { kk: '2-қабат, 8-кабинет', ru: '2 этаж, кабинет 8' },
-            tech: { kk: '2-қабат, 10-кабинет', ru: '2 этаж, кабинет 10' }
+            tech: { kk: '6-кабинет', ru: 'Кабинет 6' },
+            tourism: { kk: '8-кабинет', ru: 'Кабинет 8' },
+            eco: { kk: '4-кабинет', ru: 'Кабинет 4' },
+            art: { kk: '2-кабинет', ru: 'Кабинет 2' },
+            music: { kk: '5-кабинет', ru: 'Кабинет 5' },
+            social_ped: { kk: '11-кабинет', ru: 'Кабинет 11' },
+            humanities: { kk: '12-кабинет', ru: 'Кабинет 12' },
+            math: { kk: '13-кабинет', ru: 'Кабинет 13' },
+            sport: { kk: '7-кабинет', ru: 'Кабинет 7' },
+            directors: { kk: 'Кабинет нақтыланады', ru: 'Кабинет уточняется' }
         };
 
         // Единая функция форматирования кабинета — используется в легенде, модалке и карточках
@@ -718,20 +648,18 @@
         }
 
         // Порядок направлений и их ключ перевода — используется в форме, легенде и модалке
-        const DIRECTION_ORDER = ['sport', 'psy_school', 'it', 'psy_kindergarten', 'olympiad_reserve', 'olympiad_history', 'psy_college', 'nvp_tech', 'management', 'music', 'art', 'tech'];
+        const DIRECTION_ORDER = ['tech', 'tourism', 'eco', 'art', 'music', 'social_ped', 'humanities', 'math', 'sport', 'directors'];
         const DIRECTION_KEYS = {
-            sport: 'direction1',
-            psy_school: 'direction2',
-            it: 'direction3',
-            psy_kindergarten: 'direction4',
-            olympiad_reserve: 'direction5',
-            olympiad_history: 'direction6',
-            psy_college: 'direction7',
-            nvp_tech: 'direction8',
-            management: 'direction9',
-            music: 'direction10',
-            art: 'direction11',
-            tech: 'direction12'
+            tech: 'direction1',
+            tourism: 'direction2',
+            eco: 'direction3',
+            art: 'direction4',
+            music: 'direction5',
+            social_ped: 'direction6',
+            humanities: 'direction7',
+            math: 'direction8',
+            sport: 'direction9',
+            directors: 'direction10'
         };
 
         const translations = {
@@ -742,18 +670,16 @@
                 namePlaceholder: "Аты-жөніңізді енгізіңіз",
                 directionLabel: "Бағытыңыз:",
                 selectDirection: "Бағытты таңдаңыз",
-                direction1: "🏃 Дене шынықтыру",
-                direction2: "🧑‍🏫 Педагог-психологтар (мектеп)",
-                direction3: "💻 IT-мамандар, информатика",
-                direction4: "🧸 Балабақша педагог-психологтары",
-                direction5: "🏅 Олимпиадалық резервке дайындайтын педагогтер",
-                direction6: "📜 Олимпиадалық резервке дайындайтын педагогтер (тарих пәні)",
-                direction7: "🎓 Педагог-психологтар (колледж)",
-                direction8: "🎖️ Алғашқы әскери және технологиялық дайындық",
-                direction9: "📊 Басқару менеджмент бағыты",
-                direction10: "🎵 Музыка бағыты",
-                direction11: "🎨 Көркем-эстетикалық бағыт",
-                direction12: "🔬 Ғылыми техникалық бағыт",
+                direction1: "🔬 Ғылыми-техникалық бағыт",
+                direction2: "🧭 Туризм және өлкетану бағыты",
+                direction3: "🌿 Экологиялық-биологиялық бағыт",
+                direction4: "🎨 Көркемдік-эстетикалық бағыт",
+                direction5: "🎵 Музыкалық бағыт",
+                direction6: "🧑‍🏫 Әлеуметтік-педагогикалық бағыт",
+                direction7: "📚 Гуманитарлық бағыт (тіл курстары)",
+                direction8: "🧮 Жаратылыстану-математикалық бағыт (математикалық курстар)",
+                direction9: "🏃 Спорт бағыты",
+                direction10: "🏫 Қосымша білім беру директорлары",
                 submitBtn: "Тіркелу",
                 submitting: "Тіркелу...",
                 successMsg: "✅ Сіз сәтті тіркелдіңіз!",
@@ -762,9 +688,6 @@
                 qrTitle: "QR АРҚЫЛЫ ТІРКЕЛУ",
                 qrPlaceholder: "📱 QR код орны<br><small>Суретті кодқа жүктеңіз</small>",
                 roomsLegendTitle: "📍 Бағыттар мен кабинеттер",
-                modalDirectionLabel: "Бағыт:",
-                modalRoomLabel: "Кабинет:",
-                modalCloseBtn: "Жарайды",
                 participantsTitle: "Тіркелген қатысушылар",
                 total: "Барлығы",
                 loading: "Қатысушылар жүктелуде...",
@@ -785,18 +708,16 @@
                 namePlaceholder: "Введите ваше имя",
                 directionLabel: "Ваше направление:",
                 selectDirection: "Выберите направление",
-                direction1: "🏃 Физическая культура",
-                direction2: "🧑‍🏫 Педагоги-психологи (школа)",
-                direction3: "💻 IT-специалисты, информатика",
-                direction4: "🧸 Педагоги-психологи детского сада",
-                direction5: "🏅 Педагоги, готовящие олимпиадный резерв",
-                direction6: "📜 Педагоги, готовящие олимпиадный резерв (история)",
-                direction7: "🎓 Педагоги-психологи (колледж)",
-                direction8: "🎖️ Начальная военная и технологическая подготовка",
-                direction9: "📊 Направление управленческого менеджмента",
-                direction10: "🎵 Музыкальное направление",
-                direction11: "🎨 Художественно-эстетическое направление",
-                direction12: "🔬 Научно-техническое направление",
+                direction1: "🔬 Научно-техническое направление",
+                direction2: "🧭 Туристско-краеведческое направление",
+                direction3: "🌿 Эколого-биологическое направление",
+                direction4: "🎨 Художественно-эстетическое направление",
+                direction5: "🎵 Музыкальное направление",
+                direction6: "🧑‍🏫 Социально-педагогическое направление",
+                direction7: "📚 Гуманитарное направление (языковые курсы)",
+                direction8: "🧮 Естественно-математическое направление (математические курсы)",
+                direction9: "🏃 Спортивное направление",
+                direction10: "🏫 Директора учреждений дополнительного образования",
                 submitBtn: "Зарегистрироваться",
                 submitting: "Регистрация...",
                 successMsg: "✅ Вы успешно зарегистрированы!",
@@ -805,9 +726,6 @@
                 qrTitle: "РЕГИСТРАЦИЯ ЧЕРЕЗ QR",
                 qrPlaceholder: "📱 Место для QR-кода<br><small>Загрузите изображение в код</small>",
                 roomsLegendTitle: "📍 Направления и кабинеты",
-                modalDirectionLabel: "Направление:",
-                modalRoomLabel: "Кабинет:",
-                modalCloseBtn: "Понятно",
                 participantsTitle: "Зарегистрированные участники",
                 total: "Всего",
                 loading: "Загрузка участников...",
@@ -892,24 +810,6 @@
         }
         renderRoomsLegend();
 
-        // ========================================
-        // МОДАЛЬНОЕ ОКНО С НОМЕРОМ КАБИНЕТА
-        // ========================================
-        function showRoomModal(directionText, room) {
-            document.getElementById('modalSuccessText').textContent = translations[currentLang].successMsg;
-            document.getElementById('modalDirectionText').textContent = directionText;
-            document.getElementById('modalRoomText').textContent = room;
-            document.getElementById('roomModalOverlay').classList.add('show');
-        }
-        function hideRoomModal() {
-            document.getElementById('roomModalOverlay').classList.remove('show');
-        }
-        document.getElementById('modalCloseBtn').addEventListener('click', hideRoomModal);
-        document.getElementById('roomModalOverlay').addEventListener('click', function(e) {
-            if (e.target === this) hideRoomModal();
-        });
-
-
         // Отправка формы
         document.getElementById('regForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -936,7 +836,6 @@
             submitBtn.textContent = translations[currentLang].submitting;
 
             const directionToSave = translations[currentLang][DIRECTION_KEYS[selectedDirection]];
-            const roomToShow = getRoomLabel(selectedDirection);
 
             try {
                 await fetch(CONFIG.webAppUrl, {
@@ -951,8 +850,9 @@
                     })
                 });
 
-                showRoomModal(directionToSave, roomToShow);
-                
+                document.getElementById('successMessage').classList.add('show');
+                setTimeout(() => document.getElementById('successMessage').classList.remove('show'), 3000);
+
                 // Очистка формы после успеха
                 document.getElementById('name').value = '';
                 selectedDirection = null;
@@ -976,17 +876,15 @@
             if (!directionString) return 'other';
             const s = directionString.toLowerCase();
 
-            if (s.includes('дене шынықтыру') || s.includes('физическ')) return 'sport';
-            if (s.includes('колледж')) return 'psy_college';
-            if (s.includes('балабақша') || s.includes('детск')) return 'psy_kindergarten';
-            if (s.includes('мектеп') || s.includes('школ')) return 'psy_school';
-            if (s.includes('it-') || s.includes('информатика')) return 'it';
-            if (s.includes('тарих') || s.includes('истори')) return 'olympiad_history';
-            if (s.includes('олимпиад')) return 'olympiad_reserve';
-            if (s.includes('әскери') || s.includes('военн') || s.includes('технологиялық') || s.includes('технологич')) return 'nvp_tech';
-            if (s.includes('менеджмент')) return 'management';
-            if (s.includes('музыка') || s.includes('музык')) return 'music';
-            if (s.includes('көркем') || s.includes('художест')) return 'art';
+            if (s.includes('спорт')) return 'sport';
+            if (s.includes('туризм') || s.includes('өлкетану') || s.includes('краеведч')) return 'tourism';
+            if (s.includes('эколог') || s.includes('биолог')) return 'eco';
+            if (s.includes('көркем') || s.includes('эстетик') || s.includes('художест')) return 'art';
+            if (s.includes('музык')) return 'music';
+            if (s.includes('әлеуметтік') || s.includes('социальн') || s.includes('педагогик')) return 'social_ped';
+            if (s.includes('гуманитар') || s.includes('тіл курс') || s.includes('языков')) return 'humanities';
+            if (s.includes('жаратылыстану') || s.includes('математик') || s.includes('естественно')) return 'math';
+            if (s.includes('директор') || s.includes('қосымша білім') || s.includes('дополнительн')) return 'directors';
             if (s.includes('ғылыми') || s.includes('техник') || s.includes('научно')) return 'tech';
 
             return 'other';
@@ -1047,18 +945,16 @@
                     
                     const nDirection = normalizeDirection(direction);
                     let directionIcon = '📌';
-                    if (nDirection === 'sport') directionIcon = '🏃';
-                    if (nDirection === 'psy_school') directionIcon = '🧑‍🏫';
-                    if (nDirection === 'it') directionIcon = '💻';
-                    if (nDirection === 'psy_kindergarten') directionIcon = '🧸';
-                    if (nDirection === 'olympiad_reserve') directionIcon = '🏅';
-                    if (nDirection === 'olympiad_history') directionIcon = '📜';
-                    if (nDirection === 'psy_college') directionIcon = '🎓';
-                    if (nDirection === 'nvp_tech') directionIcon = '🎖️';
-                    if (nDirection === 'management') directionIcon = '📊';
-                    if (nDirection === 'music') directionIcon = '🎵';
-                    if (nDirection === 'art') directionIcon = '🎨';
                     if (nDirection === 'tech') directionIcon = '🔬';
+                    if (nDirection === 'tourism') directionIcon = '🧭';
+                    if (nDirection === 'eco') directionIcon = '🌿';
+                    if (nDirection === 'art') directionIcon = '🎨';
+                    if (nDirection === 'music') directionIcon = '🎵';
+                    if (nDirection === 'social_ped') directionIcon = '🧑‍🏫';
+                    if (nDirection === 'humanities') directionIcon = '📚';
+                    if (nDirection === 'math') directionIcon = '🧮';
+                    if (nDirection === 'sport') directionIcon = '🏃';
+                    if (nDirection === 'directors') directionIcon = '🏫';
 
                     const room = getRoomLabel(nDirection);
 
